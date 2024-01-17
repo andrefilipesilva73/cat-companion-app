@@ -6,57 +6,34 @@ The main purpose of this project is to develop my Android development skills, as
 > [!IMPORTANT]
 > I'm not an Android developer and my knowledge of Android is limited to managing development teams. This is an opportunity to deepen my knowledge in this area, as well as to effectively update myself on the latest technologies available and the current state of Android development.
 
-## The Challenge 🎯
+## Full Documentation 📘
 
-Write an application using **Kotlin** that utilises the Cat API (https://thecatapi.com/). I can implement the UI as I prefer. I'm free to use any libraries that I consider appropriate solutions to my technical needs. Also, I should write a short readme explaining the strategies decided during the development of this challenge.
+See the [Wiki](https://github.com/andrefilipesilva73/cat-companion-app/wiki) for full documentation, planning, execution, decisions, operational details and other information.
 
-> [!NOTE]
-> Tip: The Cat API provides OpenAPI Spec and Postman docs.
+## Bugs and Feedback 🐞 🗣️
 
-## The Product Requirements 📋
+For bugs, questions and discussions please use the [GitHub Issues](https://github.com/andrefilipesilva73/cat-companion-app/issues).
 
-My Application should have the following functionalities:
-1. A screen with a list of cat breeds, with the following info:
-   - a. Cat image;
-   - b. Breed name.
-3. The cat breeds screen should contain a search bar to filter the list by breed name.
-4. The cat breeds screen should contain a button to mark the breed as favourite.
-5. Implement a new screen to show the breeds marked as favourites.
-a. Show the average lifespan of all the favourite breeds (I can use either
-the lower or the higher value in the range).
-6. Implement a screen with a detailed view of a breed, with the following info:
-   - a. Breed Name;
-   - b. Origin;
-   - c. Temperament;
-   - d. Description;
-   - e. A button to add/remove the breed from the favourites.
-8. In order to navigate between the different screens I should use a Jetpack Navigation
-Component.
-9. Pressing on one of the list elements (be it in whatever screen) it should open the
-detailed view of a breed.
+## LICENSE 👨‍🎓
 
-## The Technical Requirements 🤖
+MIT License
 
-* MVVM architecture
-* Usage of Jetpack Compose for UI building
-* Unit test coverage
-* Offline functionality (i.e: Let's consider using [Room](https://developer.android.com/training/data-storage/room) for data persistence)
+Copyright (c) 2024 André Filipe Silva
 
-Bonus points:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-* Error Handling
-* Pagination for the list of cat breeds
-* Modular design
-* Integration and E2e tests
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-## Some Considerations 🤔
-
-This app shoulb be evaluated on:
-1. Implementation of the stated requirements
-2. Application Architecture
-3. The general quality of the code and it's resistance to crashing
-4. My use of Android coding conventions
-5. Knowledge and usage of Android libraries and SDKs
-6. UI and UX -- I'm should not spend any time creating custom icons or other
-assets, the app should look clean and generally obey the Human Interface
-Guidelines
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
