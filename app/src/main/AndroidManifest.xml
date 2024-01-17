@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- XML declaration specifying the version and encoding of the XML document -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- AndroidManifest.xml file root element with namespace declarations -->
 
     <application
         android:allowBackup="true"
@@ -12,14 +15,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CatCompanion"
         tools:targetApi="31">
+        <!-- Application configuration block -->
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">
+            <!-- Declaration of the MainActivity as an activity -->
+
             <intent-filter>
+                <!-- Specify the types of intents this activity can respond to -->
+
                 <action android:name="android.intent.action.MAIN" />
+                <!-- Specify that this activity is the main entry point -->
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <!-- Specify that this activity should appear in the launcher -->
             </intent-filter>
         </activity>
     </application>
