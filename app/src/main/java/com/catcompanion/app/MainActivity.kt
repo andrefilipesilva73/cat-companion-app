@@ -5,13 +5,16 @@ package com.catcompanion.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.catcompanion.app.screens.BreedsListScreen
+import com.catcompanion.app.screens.FavoritesListScreen
+import com.catcompanion.app.screens.BreedDetailScreen
 import com.catcompanion.app.ui.theme.CatCompanionAppTheme
 
 // Declare the MainActivity class, extending ComponentActivity
@@ -19,17 +22,38 @@ class MainActivity : ComponentActivity() {
     // Override the onCreate method to set up the activity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         // Set the content of the activity using Jetpack Compose
         setContent {
             // Apply the CatCompanionAppTheme to the entire content
             CatCompanionAppTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(), // Set the size to fill the maximum available space
-                    color = MaterialTheme.colorScheme.background // Set the background color from the MaterialTheme
+                // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
+                val navController = rememberNavController()
+
+                // Create the NavHost
+                NavHost(
+                    navController = navController,
+                    startDestination = "breedsListScreen"
                 ) {
-                    // Call the Greeting composable function with the parameter "Android"
-                    Greeting("Android")
+                    // Breeds List Screen
+                    composable("breedsListScreen") {
+                        BreedsListScreen(navController)
+                    }
+
+                    // Favorites List Screen
+                    composable("favoritesListScreen") {
+                        FavoritesListScreen(navController)
+                    }
+
+                    // Breed Detail Screen
+                    composable("breedDetailScreen/{breed}") { backStackEntry ->
+                        // Instantiate BreedDetailScreen with parameters, using data from the back stack entry
+                        // backStackEntry is an object representing the current state in the navigation back stack
+                        BreedDetailScreen(
+                            navController, // Pass the navigation controller to the BreedDetailScreen
+                            breed = backStackEntry.arguments?.getString("breed") ?: "" // Retrieve the "breed" argument from the back stack entry; use an empty string if null
+                        )
+                    }
                 }
             }
         }
