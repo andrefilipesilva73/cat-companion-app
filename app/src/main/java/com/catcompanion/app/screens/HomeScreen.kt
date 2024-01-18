@@ -15,12 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 // Annotate the function to opt into using ExperimentalMaterial3Api
@@ -29,6 +28,12 @@ import androidx.navigation.compose.rememberNavController
 fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
     // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
     val navController = rememberNavController()
+
+    // Get the current back stack entry
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
+    // Get the current route from the back stack entry
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     // Content goes here
     Scaffold(
@@ -39,16 +44,11 @@ fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
             )
         },
         bottomBar = {
-            // BottomBar goes here
-            val selectedDestination by remember {
-                mutableStateOf("home")
-            }
-
             // Bottom Navigation bar
             NavigationBar(modifier = Modifier.fillMaxWidth()) {
                 // List item
                 NavigationBarItem(
-                    selected = selectedDestination == "home",
+                    selected = currentRoute == "breedsListScreen",
                     onClick = {
                         navController.navigate("breedsListScreen") {
                             popUpTo(navController.graph.startDestinationRoute!!) {
@@ -64,7 +64,7 @@ fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
 
                 // Favorites item
                 NavigationBarItem(
-                    selected = selectedDestination == "favorites",
+                    selected = currentRoute == "favoritesListScreen",
                     onClick = {
                         navController.navigate("favoritesListScreen") {
                             popUpTo(navController.graph.startDestinationRoute!!) {
