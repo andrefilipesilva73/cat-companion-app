@@ -42,7 +42,7 @@ fun BreedsListScreen(navController: NavHostController) {
             Card(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 onClick = {
-                    // Use the navigation controller to navigate to the "breedDetailScreen/{breed}" destination
+                    // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
                     navController.navigate("breedDetailScreen/${breed.name}") {
                         // Configure the navigation behavior
                         launchSingleTop = true // Launch as a single top-level destination

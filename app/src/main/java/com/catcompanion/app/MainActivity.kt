@@ -51,12 +51,12 @@ fun Main(modifier: Modifier = Modifier) {
         }
 
         // Breed Detail Screen
-        composable("breedDetailScreen/{breed}") { backStackEntry ->
+        composable("breedDetailScreen/{breedId}") { backStackEntry ->
             // Instantiate BreedDetailScreen with parameters, using data from the back stack entry
             // backStackEntry is an object representing the current state in the navigation back stack
             BreedDetailScreen(
                 navController, // Pass the navigation controller to the BreedDetailScreen
-                breed = backStackEntry.arguments?.getString("breed") ?: "" // Retrieve the "breed" argument from the back stack entry; use an empty string if null
+                breed = backStackEntry.arguments?.getString("breedId") ?: "" // Retrieve the "breed" argument from the back stack entry; use an empty string if null
             )
         }
     }

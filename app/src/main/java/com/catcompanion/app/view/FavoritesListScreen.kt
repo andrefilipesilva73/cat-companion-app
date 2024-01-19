@@ -30,8 +30,8 @@ fun FavoritesListScreenContent(navController: NavHostController) {
             Card(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 onClick = {
-                    // Use the navigation controller to navigate to the "breedDetailScreen/{breed}" destination
-                    navController.navigate("breedDetailScreen/{breed}") {
+                    // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
+                    navController.navigate("breedDetailScreen/{breedId}") {
                         // Configure the navigation behavior
                         launchSingleTop = true // Launch as a single top-level destination
                         popUpTo(navController.graph.startDestinationId) {
