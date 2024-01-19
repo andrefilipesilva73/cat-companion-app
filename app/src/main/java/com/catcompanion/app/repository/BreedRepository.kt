@@ -30,7 +30,7 @@ class BreedRepository {
     suspend fun getBreeds(): Flow<List<Breed>> {
         try {
             // Fetch breeds from the API
-            val apiBreeds = catApiService.getBreeds()
+            val apiBreeds = catApiService.getBreeds(2, 0)
 
             // Update the breeds list
             breeds.clear()
