@@ -3,8 +3,6 @@ package com.catcompanion.app.repository
 import com.catcompanion.app.BuildConfig
 import com.catcompanion.app.api.CatApiService
 import com.catcompanion.app.model.Breed
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -41,25 +39,16 @@ class BreedRepository {
         // Add more breeds as needed
     )
 
-    private val breeds: MutableList<Breed> = mutableListOf()
-
-    suspend fun getBreeds(): Flow<List<Breed>> {
-        try {
+    suspend fun getBreedsByPages(limit: Int, page: Int): List<Breed> {
+        return try {
             // Fetch breeds from the API
-            val apiBreeds = catApiService.getBreeds(2, 0)
-
-            // Update the breeds list
-            breeds.clear()
-            breeds.addAll(apiBreeds)
-
-            // Use MutableStateFlow for simplicity, replace with appropriate Flow implementation
-            return MutableStateFlow(breeds.toList())
+            catApiService.getBreeds(limit, page)
         } catch (e: Exception) {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
 
             // Return the default breeds in case of an error
-            return MutableStateFlow(defaultBreeds.toList())
+            defaultBreeds.toList()
         }
     }
 }

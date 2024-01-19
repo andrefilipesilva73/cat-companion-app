@@ -90,8 +90,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Paging
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.paging:paging-compose:3.2.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
     // Test implementation dependencies
     testImplementation("junit:junit:4.13.2")
