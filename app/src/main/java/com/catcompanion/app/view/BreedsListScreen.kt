@@ -23,6 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.catcompanion.app.R
+import com.catcompanion.app.model.Breed
 import com.catcompanion.app.repository.BreedRepository
 import com.catcompanion.app.viewmodel.BreedViewModel
 
@@ -42,12 +43,14 @@ fun BreedsListScreen(navController: NavHostController) {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(pagingData.itemCount) { breed ->
+        items(pagingData.itemCount) { index ->
+            val breed = pagingData[index] as Breed
+
             Card(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 onClick = {
                     // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
-                    navController.navigate("breedDetailScreen/${pagingData[breed]?.id}") {
+                    navController.navigate("breedDetailScreen/${breed.id}") {
                         // Configure the navigation behavior
                         launchSingleTop = true // Launch as a single top-level destination
                         popUpTo(navController.graph.startDestinationId) {
@@ -57,7 +60,7 @@ fun BreedsListScreen(navController: NavHostController) {
                 }
             ) {
                 // Inside the Card composable, define the content of the card
-                Text(text = pagingData[breed]?.name.toString())
+                Text(text = breed.name)
             }
         }
         pagingData.apply {

@@ -34,15 +34,27 @@ class BreedRepository {
     }
 
     private val defaultBreeds = mutableListOf(
-        Breed("1", "American Shorthair"),
-        Breed("2", "Bengal"),
+        Breed("1", "American Shorthair", "1"),
+        Breed("2", "Bengal", "2"),
         // Add more breeds as needed
     )
 
     suspend fun getBreedsByPages(limit: Int, page: Int): List<Breed> {
         return try {
             // Fetch breeds from the API
-            catApiService.getBreeds(limit, page)
+            val response = catApiService.getBreeds(limit, page)
+
+            // Map the response to your Breed model
+            val mappedBreeds = response.map { apiBreed ->
+                Breed(
+                    apiBreed.id,
+                    apiBreed.name,
+                    "${BuildConfig.CAT_API_BASE_URL}/v1/images/${apiBreed.reference_image_id}"
+                )
+            }
+
+            // Return the mapped breeds
+            mappedBreeds
         } catch (e: Exception) {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
