@@ -23,7 +23,7 @@ class BreedPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Breed> {
         return try {
             val currentPage = params.key ?: 1
-            val response = breedRepository.getBreedsByPages(10, currentPage - 1)
+            val response = breedRepository.getBreedsByPages(20, currentPage - 1)
             LoadResult.Page(
                 data = response,
                 prevKey = if (currentPage == 1) null else currentPage - 1,
