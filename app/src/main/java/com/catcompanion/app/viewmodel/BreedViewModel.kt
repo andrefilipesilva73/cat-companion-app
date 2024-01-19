@@ -49,6 +49,10 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
         private set
 
     init {
+        fetchData()
+    }
+
+    private fun fetchData() {
         viewModelScope.launch {
             Pager(
                 config = PagingConfig(
@@ -60,5 +64,9 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
                 _breedResponse.value = it
             }
         }
+    }
+
+    fun retry() {
+        fetchData()
     }
 }
