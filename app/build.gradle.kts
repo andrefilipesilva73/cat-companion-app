@@ -27,6 +27,7 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "CAT_API_BASE_URL", "\"https://api.thecatapi.com\"")
+            buildConfigField("String", "CAT_API_API_KEY", "\"live_vBJtyckXF5MeP5oY1dO85zBt0aFY74OJKbhyCNrYk3mlcva4Ey9bAm7gCIiYeV1M\"")
         }
         release {
             isMinifyEnabled = false // Disable code shrinking and obfuscation
@@ -35,6 +36,7 @@ android {
                 "proguard-rules.pro"
             ) // Specify ProGuard configuration files
             buildConfigField("String", "CAT_API_BASE_URL", "\"https://api.thecatapi.com\"")
+            buildConfigField("String", "CAT_API_API_KEY", "\"live_vBJtyckXF5MeP5oY1dO85zBt0aFY74OJKbhyCNrYk3mlcva4Ey9bAm7gCIiYeV1M\"")
         }
     }
 
@@ -86,6 +88,10 @@ dependencies {
     // Retrofit + GSON
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Paging
+    implementation("androidx.paging:paging-compose:3.2.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
     // Test implementation dependencies
     testImplementation("junit:junit:4.13.2")
