@@ -25,12 +25,16 @@ android {
 
     // Build types configuration
     buildTypes {
+        debug {
+            buildConfigField("String", "CAT_API_BASE_URL", "\"https://api.thecatapi.com\"")
+        }
         release {
             isMinifyEnabled = false // Disable code shrinking and obfuscation
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             ) // Specify ProGuard configuration files
+            buildConfigField("String", "CAT_API_BASE_URL", "\"https://api.thecatapi.com\"")
         }
     }
 
@@ -48,6 +52,7 @@ android {
     // Build features configuration
     buildFeatures {
         compose = true // Enable Jetpack Compose
+        buildConfig = true
     }
 
     // Compose options configuration
@@ -77,6 +82,10 @@ dependencies {
 
     // Add the Navigation Component dependency
     implementation("androidx.navigation:navigation-compose:2.7.6")
+
+    // Retrofit + GSON
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Test implementation dependencies
     testImplementation("junit:junit:4.13.2")
