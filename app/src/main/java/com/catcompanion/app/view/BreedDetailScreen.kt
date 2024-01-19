@@ -1,4 +1,4 @@
-package com.catcompanion.app.screens
+package com.catcompanion.app.view
 
 // Import necessary components from the Jetpack Compose library
 import androidx.compose.material.icons.Icons

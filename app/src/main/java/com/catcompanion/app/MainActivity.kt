@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.catcompanion.app.screens.BreedDetailScreen
-import com.catcompanion.app.screens.Home
+import com.catcompanion.app.view.BreedDetailScreen
+import com.catcompanion.app.view.Home
 import com.catcompanion.app.ui.theme.CatCompanionAppTheme
 
 // Declare the MainActivity class, extending ComponentActivity
