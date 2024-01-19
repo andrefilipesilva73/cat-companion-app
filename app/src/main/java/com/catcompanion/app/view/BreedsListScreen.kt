@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import com.catcompanion.app.viewmodel.BreedViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.remember
 import com.catcompanion.app.repository.BreedRepository
 
 // Declare a composable function that represents the UI for the BreedsListScreen
@@ -23,7 +24,7 @@ import com.catcompanion.app.repository.BreedRepository
 @Composable
 fun BreedsListScreen(navController: NavHostController) {
     // Create View model
-    val breedViewModel = BreedViewModel(BreedRepository())
+    val breedViewModel = remember { BreedViewModel(BreedRepository()) }
 
     // Use remember to ensure that the data is fetched only once
     val breeds by breedViewModel.breeds.collectAsState()
