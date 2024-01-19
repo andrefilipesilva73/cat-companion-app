@@ -90,7 +90,10 @@ fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
                         }
                     },
                     icon = {
-                        Icon(Icons.Default.List, contentDescription = "List")
+                        Icon(Icons.Default.List, contentDescription = stringResource(id = R.string.breeds),)
+                    },
+                    label = {
+                        Text(text = stringResource(id = R.string.breeds),)
                     }
                 )
 
@@ -106,7 +109,10 @@ fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
                         }
                     },
                     icon = {
-                        Icon(Icons.Default.Favorite, contentDescription = "Favorites")
+                        Icon(Icons.Default.Favorite, contentDescription = stringResource(id = R.string.favorites),)
+                    },
+                    label = {
+                        Text(text = stringResource(id = R.string.favorites),)
                     }
                 )
             }
