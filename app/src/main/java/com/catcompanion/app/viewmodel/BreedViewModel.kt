@@ -19,7 +19,7 @@ class BreedViewModel : ViewModel() {
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchUsers() {
         GlobalScope.launch(Dispatchers.Main) {
-            val catBreeds = userRepository.getUsers() // Fetch breeds from the repository
+            val catBreeds = userRepository.getBreeds() // Fetch breeds from the repository
             _catBreedsList.value = catBreeds
         }
     }
