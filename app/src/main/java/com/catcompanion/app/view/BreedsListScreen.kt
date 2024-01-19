@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
-
 package com.catcompanion.app.view
 
 // Import necessary components from the Jetpack Compose library
@@ -11,34 +9,31 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.catcompanion.app.model.Breed
-import com.catcompanion.app.repository.BreedRepository
+import com.catcompanion.app.viewmodel.BreedViewModel
+import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.lazy.items
+import com.catcompanion.app.repository.BreedRepository
 
 // Declare a composable function that represents the UI for the BreedsListScreen
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BreedsListScreen(navController: NavHostController) {
+    // Create View model
+    val breedViewModel = BreedViewModel(BreedRepository())
+
     // Use remember to ensure that the data is fetched only once
-    var breedList by remember { mutableStateOf(emptyList<Breed>()) }
+    val breeds by breedViewModel.breeds.collectAsState()
 
-    LaunchedEffect(Unit) {
-        // Fetch data from the repository when the component is first launched
-        breedList = BreedRepository().getBreeds()
-    }
-
+    // Build
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(breedList) { breed ->
+        items(breeds) { breed ->
             Card(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 onClick = {

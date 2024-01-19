@@ -1,26 +1,27 @@
 package com.catcompanion.app.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.catcompanion.app.model.Breed
 import com.catcompanion.app.repository.BreedRepository
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class BreedViewModel : ViewModel() {
-    private val userRepository = BreedRepository()
+class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel() {
+    private val _breeds: MutableStateFlow<List<Breed>> = MutableStateFlow(emptyList())
+    val breeds: StateFlow<List<Breed>> get() = _breeds
 
-    private val _catBreedsList = MutableLiveData<List<Breed>>()
-    val catBreeds: LiveData<List<Breed>> get() = _catBreedsList
+    init {
+        // Fetch initial users data
+        fetchBreeds()
+    }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    fun fetchUsers() {
-        GlobalScope.launch(Dispatchers.Main) {
-            val catBreeds = userRepository.getBreeds() // Fetch breeds from the repository
-            _catBreedsList.value = catBreeds
+    private fun fetchBreeds() {
+        viewModelScope.launch {
+            _breeds.value = breedRepository.getBreeds().first()
         }
     }
 }
