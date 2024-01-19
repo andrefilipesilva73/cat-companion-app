@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">CatCompanionApp</string>
     <string name="home_title">Cat Companion 😼</string>
+    <string name="breeds">Breeds</string>
+    <string name="favorites">Favorites</string>
+    <string name="infinite_scroll_error">Could not load more items 😢</string>
 </resources>
