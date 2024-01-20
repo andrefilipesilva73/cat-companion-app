@@ -5,4 +5,5 @@
     <string name="favorites">Favorites</string>
     <string name="infinite_scroll_error">Could not load more items 😢</string>
     <string name="infinite_scroll_try_again">Try again</string>
+    <string name="search_breeds_by_name">Search by breed name</string>
 </resources>

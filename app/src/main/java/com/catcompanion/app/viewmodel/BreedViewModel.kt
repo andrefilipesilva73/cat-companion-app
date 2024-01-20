@@ -43,10 +43,18 @@ class BreedPagingSource(
 }
 
 class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel() {
+    // Breeds
     private val _breedResponse: MutableStateFlow<PagingData<Breed>> =
         MutableStateFlow(PagingData.empty())
-    var breeds = _breedResponse.asStateFlow()
-        private set
+    val breeds = _breedResponse.asStateFlow()
+
+    // First state whether the search is happening or not
+    private val _isSearching = MutableStateFlow(false)
+    val isSearching = _isSearching.asStateFlow()
+
+    // Second state the text typed by the user
+    private val _searchText = MutableStateFlow("")
+    val searchText = _searchText.asStateFlow()
 
     init {
         fetchData()
@@ -68,5 +76,16 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
 
     fun retry() {
         fetchData()
+    }
+
+    fun onSearchTextChange(text: String) {
+        _searchText.value = text
+    }
+
+    fun onToogleSearch() {
+        _isSearching.value = !_isSearching.value
+        if (!_isSearching.value) {
+            onSearchTextChange("")
+        }
     }
 }
