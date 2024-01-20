@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Button
@@ -58,6 +59,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -164,15 +166,33 @@ fun BreedsListScreen(navController: NavHostController) {
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            AsyncImage(
-                                model = breed.imageUrl,
-                                contentDescription = breed.name,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .width(100.dp)
-                                    .height(100.dp)
-                                    .clip(RoundedCornerShape(100.dp)),
-                            )
+                            if (breed.imageUrl != "") {
+                                AsyncImage(
+                                    model = breed.imageUrl,
+                                    contentDescription = breed.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(100.dp)
+                                        .clip(RoundedCornerShape(100.dp)),
+                                )
+                            } else {
+                                Column(
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(100.dp)
+                                        .clip(RoundedCornerShape(100.dp))
+                                        .border(
+                                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                                            CircleShape
+                                        ),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(Icons.Outlined.BrokenImage, contentDescription = null)
+                                }
+                            }
+
                             Column(
                                 modifier = Modifier
                                     .weight(1f)

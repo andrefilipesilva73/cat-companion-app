@@ -69,7 +69,7 @@ class BreedRepository {
             e.printStackTrace()
 
             // Return the default breeds in case of an error
-            emptyList()
+            throw e
         }
     }
 
@@ -93,7 +93,7 @@ class BreedRepository {
                 println("Exception while fetching image URL: ${e.message}")
 
                 // Return a default value or rethrow the exception
-                throw e
+                return@withContext ""
             }
         }
     }
