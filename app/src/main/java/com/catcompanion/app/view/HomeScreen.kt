@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -90,7 +90,7 @@ fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
                         }
                     },
                     icon = {
-                        Icon(Icons.Default.List, contentDescription = stringResource(id = R.string.breeds),)
+                        Icon(Icons.Filled.List, contentDescription = stringResource(id = R.string.breeds),)
                     },
                     label = {
                         Text(text = stringResource(id = R.string.breeds),)
@@ -109,7 +109,7 @@ fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
                         }
                     },
                     icon = {
-                        Icon(Icons.Default.Favorite, contentDescription = stringResource(id = R.string.favorites),)
+                        Icon(Icons.Filled.Star, contentDescription = stringResource(id = R.string.favorites),)
                     },
                     label = {
                         Text(text = stringResource(id = R.string.favorites),)

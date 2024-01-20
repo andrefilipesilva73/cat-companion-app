@@ -1,8 +1,13 @@
 package com.catcompanion.app.repository
 
+import android.util.Log
 import com.catcompanion.app.BuildConfig
 import com.catcompanion.app.api.CatApiService
 import com.catcompanion.app.model.Breed
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -33,34 +38,63 @@ class BreedRepository {
             .create(CatApiService::class.java)
     }
 
-    private val defaultBreeds = mutableListOf(
-        Breed("1", "American Shorthair", "1"),
-        Breed("2", "Bengal", "2"),
-        // Add more breeds as needed
-    )
-
     suspend fun getBreedsByPages(limit: Int, page: Int): List<Breed> {
         return try {
             // Fetch breeds from the API
             val response = catApiService.getBreeds(limit, page)
 
-            // Map the response to your Breed model
-            val mappedBreeds = response.map { apiBreed ->
-                Breed(
-                    apiBreed.id,
-                    apiBreed.name,
-                    "${BuildConfig.CAT_API_BASE_URL}/v1/images/${apiBreed.reference_image_id}"
-                )
-            }
+            // Use coroutineScope to perform parallel tasks
+            coroutineScope {
+                // Use async to fetch image URLs in parallel
+                val imageUrlsDeferred = response.map { apiBreed ->
+                    async {
+                        getImageUrl(apiBreed.reference_image_id, apiBreed.id) }
+                }
 
-            // Return the mapped breeds
-            mappedBreeds
+                // Map the response to your Breed model with image URLs
+                val mappedBreeds = response.mapIndexed { index, apiBreed ->
+                    Breed(
+                        apiBreed.id,
+                        apiBreed.name,
+                        apiBreed.temperament,
+                        imageUrlsDeferred[index].await()
+                    )
+                }
+
+                // Return the mapped breeds
+                mappedBreeds
+            }
         } catch (e: Exception) {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
 
             // Return the default breeds in case of an error
-            defaultBreeds.toList()
+            emptyList()
+        }
+    }
+
+    private suspend fun getImageUrl(imageId: String?, breedId: String): String {
+        return withContext(Dispatchers.IO) {
+            try {
+                // Evaluate image existence
+                if (imageId == null) {
+                    // Perform the secondary HTTP request to fetch image URL
+                    val imagesUrlResponse = catApiService.getBreedImageBySearch(breedId)
+                    return@withContext imagesUrlResponse[0].url
+                } else {
+                    // Perform the secondary HTTP request to fetch image URL
+                    val imageUrlResponse = catApiService.getImageById(imageId)
+                    return@withContext imageUrlResponse.url
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // Handle the exception as needed
+                // For debugging, print the exception message
+                println("Exception while fetching image URL: ${e.message}")
+
+                // Return a default value or rethrow the exception
+                throw e
+            }
         }
     }
 }
