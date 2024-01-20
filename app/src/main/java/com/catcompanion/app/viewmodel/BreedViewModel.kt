@@ -11,7 +11,10 @@ import androidx.paging.cachedIn
 import com.catcompanion.app.model.Breed
 import com.catcompanion.app.repository.BreedRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -48,13 +51,34 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
         MutableStateFlow(PagingData.empty())
     val breeds = _breedResponse.asStateFlow()
 
-    // First state whether the search is happening or not
+    // Whether the search is happening or not
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
-    // Second state the text typed by the user
+    // Search text typed by the user
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
+
+    // Search list
+    private val _searchResultsList = MutableStateFlow<List<String>>(emptyList<String>())
+    val searchResultsList = searchText
+        .combine(_searchResultsList) { text, results ->// Combine searchText with _searchResultsList
+            // Evaluate current text
+            if (text.isBlank()) { // Return an empty list (it could be improved with recent breeds or favorites, etc).
+                emptyList<String>()
+            } else {
+                // Otherwise, filter and return a list of names based on the text the user typed
+                mutableListOf(
+                    text,
+                    "ola",
+                    "adeus"
+                ).toList()
+            }
+        }.stateIn( // Basically convert the Flow returned from combine operator to StateFlow
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000), // It will allow the StateFlow survive 5 seconds before it been canceled
+            initialValue = _searchResultsList.value
+        )
 
     init {
         fetchData()
