@@ -58,6 +58,17 @@ import com.catcompanion.app.repository.BreedRepository
 import com.catcompanion.app.viewmodel.BreedViewModel
 import androidx.compose.foundation.lazy.items
 
+private fun navigateToBreedDetail(navController: NavHostController, breed: Breed) {
+    // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
+    navController.navigate("breedDetailScreen/${breed.id}") {
+        // Configure the navigation behavior
+        launchSingleTop = true // Launch as a single top-level destination
+        popUpTo(navController.graph.startDestinationId) {
+            saveState = true // Save the state of the popped destinations
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BreedCard(navController: NavHostController, breed: Breed) {
@@ -67,14 +78,7 @@ fun BreedCard(navController: NavHostController, breed: Breed) {
             .fillMaxWidth()
             .heightIn(0.dp, 256.dp),
         onClick = {
-            // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
-            navController.navigate("breedDetailScreen/${breed.id}") {
-                // Configure the navigation behavior
-                launchSingleTop = true // Launch as a single top-level destination
-                popUpTo(navController.graph.startDestinationId) {
-                    saveState = true // Save the state of the popped destinations
-                }
-            }
+            navigateToBreedDetail(navController, breed)
         }
     ) {
         // Inside the Card composable, define the content of the card
@@ -133,6 +137,55 @@ fun BreedCard(navController: NavHostController, breed: Breed) {
     }
 }
 
+@Composable
+fun SearchLine(navController: NavHostController, breed: Breed) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .clickable(onClick = {
+                navigateToBreedDetail(navController, breed)
+            }),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (breed.imageUrl != "") {
+            AsyncImage(
+                model = breed.imageUrl,
+                contentDescription = breed.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(32.dp)
+                    .height(32.dp)
+                    .clip(RoundedCornerShape(32.dp)),
+            )
+        } else {
+            Column(
+                modifier = Modifier
+                    .width(32.dp)
+                    .height(32.dp)
+                    .clip(RoundedCornerShape(32.dp))
+                    .border(
+                        BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                        CircleShape
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Icon(Icons.Outlined.BrokenImage, contentDescription = null)
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(12.dp)
+        ) {
+            Text(text = breed.name)
+        }
+    }
+}
+
 // Declare a composable function that represents the UI for the BreedsListScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -183,51 +236,7 @@ fun BreedsListScreen(navController: NavHostController) {
             ) {
                 LazyColumn {
                     items(searchResultsList) { breed ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 8.dp)
-                                .clickable(onClick = {
-                                    /* TODO */
-                                }),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            if (breed.imageUrl != "") {
-                                AsyncImage(
-                                    model = breed.imageUrl,
-                                    contentDescription = breed.name,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .width(32.dp)
-                                        .height(32.dp)
-                                        .clip(RoundedCornerShape(32.dp)),
-                                )
-                            } else {
-                                Column(
-                                    modifier = Modifier
-                                        .width(32.dp)
-                                        .height(32.dp)
-                                        .clip(RoundedCornerShape(32.dp))
-                                        .border(
-                                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                                            CircleShape
-                                        ),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center
-                                ) {
-                                    Icon(Icons.Outlined.BrokenImage, contentDescription = null)
-                                }
-                            }
-
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(12.dp)
-                            ) {
-                                Text(text = breed.name)
-                            }
-                        }
+                        SearchLine(navController, breed)
                     }
                 }
             }
