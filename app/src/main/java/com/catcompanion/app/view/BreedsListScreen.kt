@@ -107,15 +107,52 @@ fun BreedsListScreen(navController: NavHostController) {
                 }
             ) {
                 LazyColumn {
-                    items(searchResultsList) { result ->
-                        Text(
-                            text = result,
-                            modifier = Modifier.padding(
-                                start = 8.dp,
-                                top = 4.dp,
-                                end = 8.dp,
-                                bottom = 4.dp)
-                        )
+                    items(searchResultsList) { breed ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp)
+                                .clickable(onClick = {
+                                    /* TODO */
+                                }),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            if (breed.imageUrl != "") {
+                                AsyncImage(
+                                    model = breed.imageUrl,
+                                    contentDescription = breed.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .width(32.dp)
+                                        .height(32.dp)
+                                        .clip(RoundedCornerShape(32.dp)),
+                                )
+                            } else {
+                                Column(
+                                    modifier = Modifier
+                                        .width(32.dp)
+                                        .height(32.dp)
+                                        .clip(RoundedCornerShape(32.dp))
+                                        .border(
+                                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                                            CircleShape
+                                        ),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(Icons.Outlined.BrokenImage, contentDescription = null)
+                                }
+                            }
+
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(12.dp)
+                            ) {
+                                Text(text = breed.name)
+                            }
+                        }
                     }
                 }
             }
@@ -202,7 +239,6 @@ fun BreedsListScreen(navController: NavHostController) {
                                 Icon(Icons.Outlined.StarBorder, contentDescription = "Favorite")
                             }
                         }
-
                     }
                 }
                 pagingData.apply {

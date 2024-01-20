@@ -97,4 +97,39 @@ class BreedRepository {
             }
         }
     }
+
+    suspend fun getBreedsBySearch(breedName: String): List<Breed> {
+        return try {
+            // Fetch breeds from the API
+            val response = catApiService.getBreedsBySearch(breedName, 1)
+
+            // Use coroutineScope to perform parallel tasks
+            coroutineScope {
+                // Use async to fetch image URLs in parallel
+                val imageUrlsDeferred = response.map { apiBreed ->
+                    async {
+                        getImageUrl(apiBreed.reference_image_id, apiBreed.id) }
+                }
+
+                // Map the response to your Breed model with image URLs
+                val mappedBreeds = response.mapIndexed { index, apiBreed ->
+                    Breed(
+                        apiBreed.id,
+                        apiBreed.name,
+                        apiBreed.temperament,
+                        imageUrlsDeferred[index].await()
+                    )
+                }
+
+                // Return the mapped breeds
+                mappedBreeds
+            }
+        } catch (e: Exception) {
+            // Handle errors (e.g., network issues)
+            e.printStackTrace()
+
+            // Return the default breeds in case of an error
+            throw e
+        }
+    }
 }

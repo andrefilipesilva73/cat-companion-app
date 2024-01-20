@@ -22,6 +22,9 @@ interface CatApiService {
     @GET("v1/breeds")
     suspend fun getBreeds(@Query("limit") limit: Int, @Query("page") page: Int): List<BreedCatApi>
 
+    @GET("v1/breeds/search")
+    suspend fun getBreedsBySearch(@Query("q") breedName: String, @Query("attach_image") attachImage: Int): List<BreedCatApi>
+
     @GET("v1/images/{imageId}")
     suspend fun getImageById(@Path("imageId") imageId: String): ImageCatApi
 

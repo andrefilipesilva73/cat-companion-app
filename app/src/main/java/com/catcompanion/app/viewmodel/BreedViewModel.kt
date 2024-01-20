@@ -60,19 +60,15 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
     val searchText = _searchText.asStateFlow()
 
     // Search list
-    private val _searchResultsList = MutableStateFlow<List<String>>(emptyList<String>())
+    private val _searchResultsList = MutableStateFlow<List<Breed>>(emptyList<Breed>())
     val searchResultsList = searchText
         .combine(_searchResultsList) { text, results ->// Combine searchText with _searchResultsList
             // Evaluate current text
             if (text.isBlank()) { // Return an empty list (it could be improved with recent breeds or favorites, etc).
-                emptyList<String>()
+                emptyList<Breed>()
             } else {
                 // Otherwise, filter and return a list of names based on the text the user typed
-                mutableListOf(
-                    text,
-                    "ola",
-                    "adeus"
-                ).toList()
+                breedRepository.getBreedsBySearch(text)
             }
         }.stateIn( // Basically convert the Flow returned from combine operator to StateFlow
             scope = viewModelScope,
