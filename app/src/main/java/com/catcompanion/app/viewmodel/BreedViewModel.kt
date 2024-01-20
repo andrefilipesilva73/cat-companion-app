@@ -67,8 +67,16 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
             if (text.isBlank()) { // Return an empty list (it could be improved with recent breeds or favorites, etc).
                 emptyList<Breed>()
             } else {
-                // Otherwise, filter and return a list of names based on the text the user typed
-                breedRepository.getBreedsBySearch(text)
+                try {
+                    // Otherwise, filter and return a list of names based on the text the user typed
+                    breedRepository.getBreedsBySearch(text)
+                } catch (e: Exception) {
+                    // Handle errors (e.g., network issues)
+                    e.printStackTrace()
+
+                    // Return an empty list (This should be improved later)
+                    emptyList<Breed>()
+                }
             }
         }.stateIn( // Basically convert the Flow returned from combine operator to StateFlow
             scope = viewModelScope,
@@ -95,17 +103,31 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
     }
 
     fun retry() {
+        // Obtain Breeds data
         fetchData()
     }
 
-    fun onSearchTextChange(text: String) {
+    fun onQueryChange(text: String) {
+        // Set search text
         _searchText.value = text
     }
 
-    fun onToogleSearch() {
+    fun onSearch(text: String) {
+        // Set search text
+        _searchText.value = text
+
+        // Close Search
         _isSearching.value = !_isSearching.value
+    }
+
+    fun onToogleSearch() {
+        // Close Search
+        _isSearching.value = !_isSearching.value
+
+        // If a search value is defined
         if (!_isSearching.value) {
-            onSearchTextChange("")
+            // Change it to nothing
+            onQueryChange("")
         }
     }
 }

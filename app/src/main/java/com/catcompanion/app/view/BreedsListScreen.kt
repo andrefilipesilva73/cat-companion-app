@@ -58,6 +58,81 @@ import com.catcompanion.app.repository.BreedRepository
 import com.catcompanion.app.viewmodel.BreedViewModel
 import androidx.compose.foundation.lazy.items
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BreedCard(navController: NavHostController, breed: Breed) {
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .heightIn(0.dp, 256.dp),
+        onClick = {
+            // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
+            navController.navigate("breedDetailScreen/${breed.id}") {
+                // Configure the navigation behavior
+                launchSingleTop = true // Launch as a single top-level destination
+                popUpTo(navController.graph.startDestinationId) {
+                    saveState = true // Save the state of the popped destinations
+                }
+            }
+        }
+    ) {
+        // Inside the Card composable, define the content of the card
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (breed.imageUrl != "") {
+                AsyncImage(
+                    model = breed.imageUrl,
+                    contentDescription = breed.name,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(100.dp)
+                        .clip(RoundedCornerShape(100.dp)),
+                )
+            } else {
+                Column(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(100.dp)
+                        .clip(RoundedCornerShape(100.dp))
+                        .border(
+                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                            CircleShape
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(Icons.Outlined.BrokenImage, contentDescription = null)
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(12.dp)
+            ) {
+                Text(text = breed.name, fontWeight = FontWeight.Bold)
+                Text(text = breed.temperament)
+            }
+            OutlinedIconButton(
+                onClick = { /* do something */ },
+                modifier = Modifier.size(50.dp), // avoid the oval shape
+                shape = CircleShape,
+                border = BorderStroke(0.dp, MaterialTheme.colorScheme.surface),
+                colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.surface)
+            ) {
+                Icon(Icons.Outlined.StarBorder, contentDescription = "Favorite")
+            }
+        }
+    }
+}
+
 // Declare a composable function that represents the UI for the BreedsListScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,15 +157,15 @@ fun BreedsListScreen(navController: NavHostController) {
                     .padding(bottom = 16.dp)
                     .fillMaxWidth(),
                 query = searchText,
-                onQueryChange = breedViewModel::onSearchTextChange,
-                onSearch = breedViewModel::onSearchTextChange,
+                onQueryChange = breedViewModel::onQueryChange,
+                onSearch = breedViewModel::onSearch,
                 active = isSearching,
                 onActiveChange = { breedViewModel.onToogleSearch() },
                 leadingIcon = {
                     Icon(Icons.Filled.Search, contentDescription = stringResource(id = R.string.search_breeds_by_name),)
                 },
                 trailingIcon = {
-                    if (isSearching) {
+                    if (isSearching || searchText.isNotEmpty()) {
                         Icon(
                             imageVector = Icons.Filled.Clear,
                             contentDescription = null,
@@ -111,7 +186,7 @@ fun BreedsListScreen(navController: NavHostController) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(12.dp)
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
                                 .clickable(onClick = {
                                     /* TODO */
                                 }),
@@ -161,132 +236,76 @@ fun BreedsListScreen(navController: NavHostController) {
         Surface(modifier = Modifier.fillMaxSize(), // Set the size to fill the maximum available space
             color = MaterialTheme.colorScheme.surfaceColorAtElevation(NavigationBarDefaults.Elevation) // Set the background color from the MaterialTheme
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(pagingData.itemCount) { index ->
-                    val breed = pagingData[index] as Breed
-
-                    Card(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth()
-                            .heightIn(0.dp, 256.dp),
-                        onClick = {
-                            // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
-                            navController.navigate("breedDetailScreen/${breed.id}") {
-                                // Configure the navigation behavior
-                                launchSingleTop = true // Launch as a single top-level destination
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true // Save the state of the popped destinations
-                                }
-                            }
-                        }
-                    ) {
-                        // Inside the Card composable, define the content of the card
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            if (breed.imageUrl != "") {
-                                AsyncImage(
-                                    model = breed.imageUrl,
-                                    contentDescription = breed.name,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .width(100.dp)
-                                        .height(100.dp)
-                                        .clip(RoundedCornerShape(100.dp)),
-                                )
-                            } else {
-                                Column(
-                                    modifier = Modifier
-                                        .width(100.dp)
-                                        .height(100.dp)
-                                        .clip(RoundedCornerShape(100.dp))
-                                        .border(
-                                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                                            CircleShape
-                                        ),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center
-                                ) {
-                                    Icon(Icons.Outlined.BrokenImage, contentDescription = null)
-                                }
-                            }
-
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(12.dp)
-                            ) {
-                                Text(text = breed.name, fontWeight = FontWeight.Bold)
-                                Text(text = breed.temperament)
-                            }
-                            OutlinedIconButton(
-                                onClick = { /* do something */ },
-                                modifier = Modifier.size(50.dp), // avoid the oval shape
-                                shape = CircleShape,
-                                border = BorderStroke(0.dp, MaterialTheme.colorScheme.surface),
-                                colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.surface)
-                            ) {
-                                Icon(Icons.Outlined.StarBorder, contentDescription = "Favorite")
-                            }
-                        }
+            // Eval if search is active
+            if (searchText.isEmpty()){
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(pagingData.itemCount) { index ->
+                        BreedCard(navController = navController, pagingData[index] as Breed)
                     }
-                }
-                pagingData.apply {
-                    when {
-                        loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(top = 16.dp),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.align(Alignment.Center)
-                                    )
+                    pagingData.apply {
+                        when {
+                            loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = 16.dp),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.align(Alignment.Center)
+                                        )
+                                    }
                                 }
                             }
-                        }
 
-                        loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
-                            item {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.Center
+                            loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
+                                item {
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        contentAlignment = Alignment.Center
                                     ) {
-                                        Text(text = stringResource(id = R.string.infinite_scroll_error))
-                                        // Retry button
-                                        Button(
-                                            onClick = { breedViewModel.retry() },
-                                            modifier = Modifier.padding(top = 16.dp)
-                                        )
-                                        {
-                                            Text(text = stringResource(id = R.string.infinite_scroll_try_again))
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            verticalArrangement = Arrangement.Center
+                                        ) {
+                                            Text(text = stringResource(id = R.string.infinite_scroll_error))
+                                            // Retry button
+                                            Button(
+                                                onClick = { breedViewModel.retry() },
+                                                modifier = Modifier.padding(top = 16.dp)
+                                            )
+                                            {
+                                                Text(text = stringResource(id = R.string.infinite_scroll_try_again))
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        loadState.refresh is LoadState.NotLoading -> {
+                            loadState.refresh is LoadState.NotLoading -> {
+                            }
                         }
                     }
                 }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(searchResultsList) { breed ->
+                        BreedCard(navController = navController, breed)
+                    }
+                }
             }
+
         }
     }
 }
