@@ -1,6 +1,9 @@
 package com.catcompanion.app.view
 
 // Import necessary components from the Jetpack Compose library
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,13 +13,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
@@ -24,12 +30,17 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -67,9 +78,6 @@ fun BreedsListScreen(navController: NavHostController) {
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
                     .heightIn(0.dp, 256.dp),
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 2.dp
-                ),
                 onClick = {
                     // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
                     navController.navigate("breedDetailScreen/${breed.id}") {
@@ -104,7 +112,13 @@ fun BreedsListScreen(navController: NavHostController) {
                         Text(text = breed.name, fontWeight = FontWeight.Bold)
                         Text(text = breed.temperament)
                     }
-                    IconButton(onClick = { /* do something */ }) {
+                    OutlinedIconButton(
+                        onClick = { /* do something */ },
+                        modifier = Modifier.size(50.dp), // avoid the oval shape
+                        shape = CircleShape,
+                        border = BorderStroke(0.dp, MaterialTheme.colorScheme.surface),
+                        colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.surface)
+                    ) {
                         Icon(Icons.Outlined.StarBorder, contentDescription = "Favorite")
                     }
                 }
@@ -116,7 +130,9 @@ fun BreedsListScreen(navController: NavHostController) {
                 loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
                     item {
                         Box(
-                            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp),
                             contentAlignment = Alignment.Center,
                         ) {
                             CircularProgressIndicator(
