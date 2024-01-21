@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class BreedPagingSource(
+class FavoritePagingSource(
     private val breedRepository: BreedRepository,
 ) : PagingSource<Int, Breed>() {
 
@@ -45,7 +45,7 @@ class BreedPagingSource(
 
 }
 
-class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel(), IBreedViewModel {
+class FavoriteViewModel(private val breedRepository: BreedRepository) : ViewModel(), IBreedViewModel {
     // Breeds
     private val _breedResponse: MutableStateFlow<PagingData<Breed>> =
         MutableStateFlow(PagingData.empty())
@@ -95,7 +95,7 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
                     10, enablePlaceholders = true
                 )
             ) {
-                BreedPagingSource(breedRepository)
+                FavoritePagingSource(breedRepository)
             }.flow.cachedIn(viewModelScope).collect {
                 _breedResponse.value = it
             }

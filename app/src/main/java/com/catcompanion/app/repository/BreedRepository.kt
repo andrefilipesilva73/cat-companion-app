@@ -1,6 +1,5 @@
 package com.catcompanion.app.repository
 
-import android.util.Log
 import com.catcompanion.app.BuildConfig
 import com.catcompanion.app.api.BreedCatApi
 import com.catcompanion.app.api.CatApiService
@@ -14,7 +13,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 class BreedRepository {
     // Cat API Service
