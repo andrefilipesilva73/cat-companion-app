@@ -60,7 +60,6 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.catcompanion.app.viewmodel.IBreedViewModel
 
 enum class BreedsListType {
