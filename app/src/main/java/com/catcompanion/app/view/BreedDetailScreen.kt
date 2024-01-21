@@ -5,9 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -36,11 +38,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.catcompanion.app.R
 import com.catcompanion.app.repository.BreedRepository
 import com.catcompanion.app.viewmodel.BreedDetailViewModel
+
+@Composable
+fun BreedDetailLine(title: String, text: String) {
+    Column {
+        Text(text = title, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+        Text(text = text)
+    }
+}
 
 // Declare a composable function that represents the UI for the BreedDetailScreen
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,19 +139,31 @@ fun BreedDetailScreen(navController: NavHostController, breedId: String) {
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(4/3f)
+                                .aspectRatio(4 / 3f)
                         )
                     } else {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(4/3f)
+                                .aspectRatio(4 / 3f)
                                 .background(Color.LightGray),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
                             Icon(Icons.Outlined.BrokenImage, contentDescription = null)
                         }
+                    }
+                    Column (
+                        modifier = Modifier.padding(12.dp)
+                    ) {
+                        Spacer(modifier = Modifier.height(4.dp)) // Add vertical space
+                        BreedDetailLine(stringResource(id = R.string.breed_detail_name), breed!!.name)
+                        Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
+                        BreedDetailLine(stringResource(id = R.string.breed_detail_origin), "name")
+                        Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
+                        BreedDetailLine(stringResource(id = R.string.breed_detail_temperament), "name")
+                        Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
+                        BreedDetailLine(stringResource(id = R.string.breed_detail_description), "name")
                     }
                 }
             }

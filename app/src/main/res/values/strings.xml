@@ -6,4 +6,8 @@
     <string name="infinite_scroll_error">Could not load more items 😢</string>
     <string name="infinite_scroll_try_again">Try again</string>
     <string name="search_breeds_by_name">Search by breed name</string>
+    <string name="breed_detail_name">Name</string>
+    <string name="breed_detail_origin">Origin</string>
+    <string name="breed_detail_temperament">Temperament</string>
+    <string name="breed_detail_description">Description</string>
 </resources>
