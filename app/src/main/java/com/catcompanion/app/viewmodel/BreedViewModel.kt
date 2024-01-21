@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.catcompanion.app.model.Breed
 import com.catcompanion.app.repository.BreedRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -128,6 +129,46 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
         if (!_isSearching.value) {
             // Change it to nothing
             onQueryChange("")
+        }
+    }
+
+    override fun addBreedToFavorites(breedId: String) {
+        // Find and update the breed in breeds
+        _breedResponse.value = _breedResponse.value.map {
+            if (it.id == breedId) {
+                it.copy(isFavorite = true)
+            } else {
+                it
+            }
+        }
+
+        // Find and update the breed in searchResultsList
+        _searchResultsList.value = _searchResultsList.value.map {
+            if (it.id == breedId) {
+                it.copy(isFavorite = true)
+            } else {
+                it
+            }
+        }
+    }
+
+    override fun removeBreedFromFavorites(breedId: String) {
+        // Find and update the breed in breeds
+        _breedResponse.value = _breedResponse.value.map {
+            if (it.id == breedId) {
+                it.copy(isFavorite = false)
+            } else {
+                it
+            }
+        }
+
+        // Find and update the breed in searchResultsList
+        _searchResultsList.value = _searchResultsList.value.map {
+            if (it.id == breedId) {
+                it.copy(isFavorite = false)
+            } else {
+                it
+            }
         }
     }
 }

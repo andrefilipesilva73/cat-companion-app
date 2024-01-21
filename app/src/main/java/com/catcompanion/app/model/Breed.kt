@@ -6,5 +6,6 @@ data class Breed (
     val temperament: String,
     val origin: String,
     val description: String,
-    var imageUrl: String
+    val imageUrl: String,
+    val isFavorite: Boolean
 )

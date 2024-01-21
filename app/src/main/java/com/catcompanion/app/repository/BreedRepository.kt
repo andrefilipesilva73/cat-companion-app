@@ -79,7 +79,8 @@ class BreedRepository {
                     apiBreed.temperament,
                     apiBreed.origin,
                     apiBreed.description,
-                    imageUrlsDeferred[index].await()
+                    imageUrlsDeferred[index].await(),
+                    false
                 )
             }
 

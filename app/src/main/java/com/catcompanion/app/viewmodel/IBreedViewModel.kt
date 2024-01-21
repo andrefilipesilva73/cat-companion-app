@@ -14,4 +14,6 @@ interface IBreedViewModel {
     fun onQueryChange(text: String)
     fun onSearch(text: String)
     fun onToggleSearch()
+    fun addBreedToFavorites(breedId: String)
+    fun removeBreedFromFavorites(breedId: String)
 }

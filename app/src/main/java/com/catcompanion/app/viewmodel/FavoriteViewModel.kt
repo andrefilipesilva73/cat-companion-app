@@ -130,4 +130,12 @@ class FavoriteViewModel(private val breedRepository: BreedRepository) : ViewMode
             onQueryChange("")
         }
     }
+
+    override fun addBreedToFavorites(breedId: String) {
+
+    }
+
+    override fun removeBreedFromFavorites(breedId: String) {
+
+    }
 }

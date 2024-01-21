@@ -1,6 +1,7 @@
 package com.catcompanion.app.fragment
 
 // Import necessary components from the Jetpack Compose library
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,7 +41,6 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,11 +54,13 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.catcompanion.app.R
 import com.catcompanion.app.model.Breed
-import com.catcompanion.app.repository.BreedRepository
-import com.catcompanion.app.viewmodel.BreedViewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.catcompanion.app.viewmodel.IBreedViewModel
 
 enum class BreedsListType {
@@ -79,12 +81,23 @@ private fun navigateToBreedDetail(navController: NavHostController, breed: Breed
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BreedCard(navController: NavHostController, breed: Breed) {
+fun BreedCard(navController: NavHostController, viewModel: IBreedViewModel, breed: Breed, type: BreedsListType) {
+    // Hold context
+    val context = LocalContext.current
+
+    // Hold labels
+    val addedToFavoritesLabel = stringResource(id = R.string.added_to_favorites)
+    val removedFromFavoritesLabel = stringResource(id = R.string.removed_from_favorites)
+
+    // Build
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .heightIn(0.dp, 256.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (breed.isFavorite) { MaterialTheme.colorScheme.primary } else { MaterialTheme.colorScheme.surfaceVariant },
+        ),
         onClick = {
             navigateToBreedDetail(navController, breed)
         }
@@ -130,13 +143,32 @@ fun BreedCard(navController: NavHostController, breed: Breed) {
                 Text(text = breed.temperament)
             }
             OutlinedIconButton(
-                onClick = { /* do something */ },
+                onClick =
+                {
+                    if (breed.isFavorite) {
+                        // Remove from favorites
+                        viewModel.removeBreedFromFavorites(breed.id)
+
+                        // Show confirmation
+                        Toast.makeText(context, "$removedFromFavoritesLabel ❌️", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Add to Favorites
+                        viewModel.addBreedToFavorites(breed.id)
+
+                        // Show confirmation
+                        Toast.makeText(context, "$addedToFavoritesLabel ⭐️", Toast.LENGTH_SHORT).show()
+                    }
+                },
                 modifier = Modifier.size(50.dp), // avoid the oval shape
                 shape = CircleShape,
                 border = BorderStroke(0.dp, MaterialTheme.colorScheme.surface),
-                colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.surface)
+                colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.surface, contentColor = MaterialTheme.colorScheme.outline)
             ) {
-                Icon(Icons.Outlined.StarOutline, contentDescription = "Favorite")
+                if (breed.isFavorite) {
+                    Icon(Icons.Filled.Star, contentDescription = "Favorite")
+                } else {
+                    Icon(Icons.Outlined.StarOutline, contentDescription = "Favorite")
+                }
             }
         }
     }
@@ -256,7 +288,7 @@ fun BreedsList(navController: NavHostController, viewModel: IBreedViewModel, typ
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(pagingData.itemCount) { index ->
-                        BreedCard(navController = navController, pagingData[index] as Breed)
+                        BreedCard(navController = navController, viewModel, pagingData[index] as Breed, type)
                     }
                     pagingData.apply {
                         when {
@@ -312,7 +344,7 @@ fun BreedsList(navController: NavHostController, viewModel: IBreedViewModel, typ
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(searchResultsList) { breed ->
-                        BreedCard(navController = navController, breed)
+                        BreedCard(navController = navController, viewModel, breed, type)
                     }
                 }
             }
