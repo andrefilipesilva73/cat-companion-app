@@ -99,6 +99,10 @@ dependencies {
     // Extended Icons
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
+    // Room dependencies
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
     // Test implementation dependencies
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
