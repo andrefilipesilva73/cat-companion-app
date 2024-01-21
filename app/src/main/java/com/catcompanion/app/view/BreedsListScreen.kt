@@ -2,6 +2,7 @@ package com.catcompanion.app.view
 
 // Import necessary components from the Jetpack Compose library
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.BrokenImage
-import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -57,6 +57,8 @@ import com.catcompanion.app.model.Breed
 import com.catcompanion.app.repository.BreedRepository
 import com.catcompanion.app.viewmodel.BreedViewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.ui.graphics.Color
 
 private fun navigateToBreedDetail(navController: NavHostController, breed: Breed) {
     // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
@@ -105,10 +107,7 @@ fun BreedCard(navController: NavHostController, breed: Breed) {
                         .width(100.dp)
                         .height(100.dp)
                         .clip(RoundedCornerShape(100.dp))
-                        .border(
-                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                            CircleShape
-                        ),
+                        .background(Color.LightGray),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -131,7 +130,7 @@ fun BreedCard(navController: NavHostController, breed: Breed) {
                 border = BorderStroke(0.dp, MaterialTheme.colorScheme.surface),
                 colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
-                Icon(Icons.Outlined.StarBorder, contentDescription = "Favorite")
+                Icon(Icons.Outlined.StarOutline, contentDescription = "Favorite")
             }
         }
     }
@@ -213,7 +212,7 @@ fun BreedsListScreen(navController: NavHostController) {
                 onQueryChange = breedViewModel::onQueryChange,
                 onSearch = breedViewModel::onSearch,
                 active = isSearching,
-                onActiveChange = { breedViewModel.onToogleSearch() },
+                onActiveChange = { breedViewModel.onToggleSearch() },
                 leadingIcon = {
                     Icon(Icons.Filled.Search, contentDescription = stringResource(id = R.string.search_breeds_by_name),)
                 },
@@ -225,7 +224,7 @@ fun BreedsListScreen(navController: NavHostController) {
                             modifier = Modifier
                                 .padding(4.dp)
                                 .clickable {
-                                    breedViewModel.onToogleSearch()
+                                    breedViewModel.onToggleSearch()
                                 }
                         )
                     }
