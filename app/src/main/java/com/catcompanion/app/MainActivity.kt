@@ -56,7 +56,7 @@ fun Main(modifier: Modifier = Modifier) {
             // backStackEntry is an object representing the current state in the navigation back stack
             BreedDetailScreen(
                 navController, // Pass the navigation controller to the BreedDetailScreen
-                breed = backStackEntry.arguments?.getString("breedId") ?: "" // Retrieve the "breed" argument from the back stack entry; use an empty string if null
+                breedId = backStackEntry.arguments?.getString("breedId") ?: "" // Retrieve the "breed" argument from the back stack entry; use an empty string if null
             )
         }
     }
