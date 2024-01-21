@@ -25,6 +25,9 @@ interface CatApiService {
     @GET("v1/breeds/search")
     suspend fun getBreedsBySearch(@Query("q") breedName: String, @Query("attach_image") attachImage: Int): List<BreedCatApi>
 
+    @GET("v1/breeds/{breedId}")
+    suspend fun getBreedById(@Path("breedId") breedId: String): BreedCatApi
+
     @GET("v1/images/{imageId}")
     suspend fun getImageById(@Path("imageId") imageId: String): ImageCatApi
 
