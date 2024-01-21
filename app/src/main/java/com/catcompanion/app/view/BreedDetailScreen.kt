@@ -159,15 +159,14 @@ fun BreedDetailScreen(navController: NavHostController, breedId: String) {
                         Spacer(modifier = Modifier.height(4.dp)) // Add vertical space
                         BreedDetailLine(stringResource(id = R.string.breed_detail_name), breed!!.name)
                         Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                        BreedDetailLine(stringResource(id = R.string.breed_detail_origin), "name")
+                        BreedDetailLine(stringResource(id = R.string.breed_detail_origin), breed!!.origin)
                         Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                        BreedDetailLine(stringResource(id = R.string.breed_detail_temperament), "name")
+                        BreedDetailLine(stringResource(id = R.string.breed_detail_temperament), breed!!.temperament)
                         Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                        BreedDetailLine(stringResource(id = R.string.breed_detail_description), "name")
+                        BreedDetailLine(stringResource(id = R.string.breed_detail_description), breed!!.description)
                     }
                 }
             }
-
         }
     }
 }
