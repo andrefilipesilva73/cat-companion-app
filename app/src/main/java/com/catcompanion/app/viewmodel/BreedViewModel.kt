@@ -62,7 +62,7 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
     // Search list
     private val _searchResultsList = MutableStateFlow<List<Breed>>(emptyList<Breed>())
     val searchResultsList = searchText
-        .combine(_searchResultsList) { text, results ->// Combine searchText with _searchResultsList
+        .combine(_searchResultsList) { text, _ ->// Combine searchText with _searchResultsList
             // Evaluate current text
             if (text.isBlank()) { // Return an empty list (it could be improved with recent breeds or favorites, etc).
                 emptyList<Breed>()
@@ -120,7 +120,7 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
         _isSearching.value = !_isSearching.value
     }
 
-    fun onToogleSearch() {
+    fun onToggleSearch() {
         // Close Search
         _isSearching.value = !_isSearching.value
 
