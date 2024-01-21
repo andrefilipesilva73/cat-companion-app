@@ -5,7 +5,6 @@ package com.catcompanion.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,7 +17,6 @@ import com.catcompanion.app.ui.theme.CatCompanionAppTheme
 
 // Declare the MainActivity class, extending ComponentActivity
 class MainActivity : ComponentActivity() {
-
     // Override the onCreate method to set up the activity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +32,6 @@ class MainActivity : ComponentActivity() {
 }
 
 // Declare a composable function Main, taking an optional modifier
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Main(modifier: Modifier = Modifier) {
     // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
