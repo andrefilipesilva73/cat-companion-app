@@ -9,10 +9,10 @@ import com.catcompanion.app.model.User
 @Dao
 interface UserDao {
     @Insert
-    suspend fun insertUser(user: User)
+    suspend fun insert(user: User)
 
     @Update
-    suspend fun updateUser(user: User)
+    suspend fun update(user: User)
 
     @Query("SELECT * FROM users")
     suspend fun getAll(): List<User>
