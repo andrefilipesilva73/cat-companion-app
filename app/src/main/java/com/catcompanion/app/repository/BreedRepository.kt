@@ -2,6 +2,7 @@ package com.catcompanion.app.repository
 
 import android.util.Log
 import com.catcompanion.app.BuildConfig
+import com.catcompanion.app.api.BreedCatApi
 import com.catcompanion.app.api.CatApiService
 import com.catcompanion.app.model.Breed
 import kotlinx.coroutines.Dispatchers
@@ -38,41 +39,6 @@ class BreedRepository {
             .create(CatApiService::class.java)
     }
 
-    suspend fun getBreedsByPages(limit: Int, page: Int): List<Breed> {
-        return try {
-            // Fetch breeds from the API
-            val response = catApiService.getBreeds(limit, page)
-
-            // Use coroutineScope to perform parallel tasks
-            coroutineScope {
-                // Use async to fetch image URLs in parallel
-                val imageUrlsDeferred = response.map { apiBreed ->
-                    async {
-                        getImageUrl(apiBreed.reference_image_id, apiBreed.id) }
-                }
-
-                // Map the response to your Breed model with image URLs
-                val mappedBreeds = response.mapIndexed { index, apiBreed ->
-                    Breed(
-                        apiBreed.id,
-                        apiBreed.name,
-                        apiBreed.temperament,
-                        imageUrlsDeferred[index].await()
-                    )
-                }
-
-                // Return the mapped breeds
-                mappedBreeds
-            }
-        } catch (e: Exception) {
-            // Handle errors (e.g., network issues)
-            e.printStackTrace()
-
-            // Return the default breeds in case of an error
-            throw e
-        }
-    }
-
     private suspend fun getImageUrl(imageId: String?, breedId: String): String {
         return withContext(Dispatchers.IO) {
             try {
@@ -98,32 +64,37 @@ class BreedRepository {
         }
     }
 
-    suspend fun getBreedsBySearch(breedName: String): List<Breed> {
+    private suspend fun fetchImageUrlsParallel(breeds: List<BreedCatApi>): List<Breed> {
+        return coroutineScope {
+            // Use async to fetch image URLs in parallel
+            val imageUrlsDeferred = breeds.map { apiBreed ->
+                async {
+                    getImageUrl(apiBreed.reference_image_id, apiBreed.id)
+                }
+            }
+
+            // Map the response to your Breed model with image URLs
+            val mappedBreeds = breeds.mapIndexed { index, apiBreed ->
+                Breed(
+                    apiBreed.id,
+                    apiBreed.name,
+                    apiBreed.temperament,
+                    imageUrlsDeferred[index].await()
+                )
+            }
+
+            // Return the mapped breeds
+            mappedBreeds
+        }
+    }
+
+    suspend fun getBreedsByPages(limit: Int, page: Int): List<Breed> {
         return try {
             // Fetch breeds from the API
-            val response = catApiService.getBreedsBySearch(breedName, 1)
+            val response = catApiService.getBreeds(limit, page)
 
-            // Use coroutineScope to perform parallel tasks
-            coroutineScope {
-                // Use async to fetch image URLs in parallel
-                val imageUrlsDeferred = response.map { apiBreed ->
-                    async {
-                        getImageUrl(apiBreed.reference_image_id, apiBreed.id) }
-                }
-
-                // Map the response to your Breed model with image URLs
-                val mappedBreeds = response.mapIndexed { index, apiBreed ->
-                    Breed(
-                        apiBreed.id,
-                        apiBreed.name,
-                        apiBreed.temperament,
-                        imageUrlsDeferred[index].await()
-                    )
-                }
-
-                // Return the mapped breeds
-                mappedBreeds
-            }
+            // Use the fetchImageUrlsParallel function
+            fetchImageUrlsParallel(response)
         } catch (e: Exception) {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
@@ -132,4 +103,41 @@ class BreedRepository {
             throw e
         }
     }
+
+    suspend fun getBreedsBySearch(breedName: String): List<Breed> {
+        return try {
+            // Fetch breeds from the API
+            val response = catApiService.getBreedsBySearch(breedName, 1)
+
+            // Use the fetchImageUrlsParallel function
+            fetchImageUrlsParallel(response)
+        } catch (e: Exception) {
+            // Handle errors (e.g., network issues)
+            e.printStackTrace()
+
+            // Return the default breeds in case of an error
+            throw e
+        }
+    }
+
+    suspend fun getBreedById(breedId: String): Breed? {
+        return try {
+            // Fetch breed details from the API
+            val response = listOf(catApiService.getBreedById(breedId))
+
+            // Use the fetchImageUrlsParallel function
+            val breeds = fetchImageUrlsParallel(response)
+
+            // Return the first breed, or null if the list is empty
+            breeds.firstOrNull()
+        } catch (e: Exception) {
+            // Handle errors (e.g., network issues)
+            e.printStackTrace()
+
+            // Return null in case of an error
+            null
+        }
+    }
+
+
 }
