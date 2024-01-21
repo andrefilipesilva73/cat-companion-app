@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.BrokenImage
@@ -77,6 +78,7 @@ fun BreedDetailScreen(navController: NavHostController, breedId: String) {
     // Content goes here
     Scaffold(
         modifier = Modifier
+            .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             // TopAppBar goes here
@@ -116,54 +118,65 @@ fun BreedDetailScreen(navController: NavHostController, breedId: String) {
         Surface(modifier = Modifier.fillMaxSize(), // Set the size to fill the maximum available space
             color = MaterialTheme.colorScheme.surfaceColorAtElevation(NavigationBarDefaults.Elevation) // Set the background color from the MaterialTheme
         ) {
-            // Check loading
-            if (isLoading) {
-                // Is loading
-                Box(
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            } else if (breed == null) {
-                // Error
-                // TODO
-            } else {
-                // List details
-                Column (modifier = Modifier.padding(innerPadding)) {
-                    if (breed!!.imageUrl != "") {
-                        AsyncImage(
-                            model = breed!!.imageUrl,
-                            contentDescription = breed!!.name,
-                            contentScale = ContentScale.Crop,
+            LazyColumn (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                item {
+                    // Check loading
+                    if (isLoading) {
+                        // Is loading
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(4 / 3f)
-                        )
-                    } else {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(4 / 3f)
-                                .background(Color.LightGray),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
+                                .padding(top = 16.dp),
+                            contentAlignment = Alignment.Center,
                         ) {
-                            Icon(Icons.Outlined.BrokenImage, contentDescription = null)
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.Center)
+                            )
                         }
-                    }
-                    Column (
-                        modifier = Modifier.padding(12.dp)
-                    ) {
-                        Spacer(modifier = Modifier.height(4.dp)) // Add vertical space
-                        BreedDetailLine(stringResource(id = R.string.breed_detail_name), breed!!.name)
-                        Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                        BreedDetailLine(stringResource(id = R.string.breed_detail_origin), breed!!.origin)
-                        Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                        BreedDetailLine(stringResource(id = R.string.breed_detail_temperament), breed!!.temperament)
-                        Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                        BreedDetailLine(stringResource(id = R.string.breed_detail_description), breed!!.description)
+                    } else if (breed == null) {
+                        // Error
+                        // TODO
+                    } else {
+                        // List details
+                        Column {
+                            if (breed!!.imageUrl != "") {
+                                AsyncImage(
+                                    model = breed!!.imageUrl,
+                                    contentDescription = breed!!.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .aspectRatio(4 / 3f)
+                                )
+                            } else {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .aspectRatio(4 / 3f)
+                                        .background(Color.LightGray),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(Icons.Outlined.BrokenImage, contentDescription = null)
+                                }
+                            }
+                            Column (
+                                modifier = Modifier.padding(12.dp)
+                            ) {
+                                Spacer(modifier = Modifier.height(4.dp)) // Add vertical space
+                                BreedDetailLine(stringResource(id = R.string.breed_detail_name), breed!!.name)
+                                Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
+                                BreedDetailLine(stringResource(id = R.string.breed_detail_origin), breed!!.origin)
+                                Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
+                                BreedDetailLine(stringResource(id = R.string.breed_detail_temperament), breed!!.temperament)
+                                Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
+                                BreedDetailLine(stringResource(id = R.string.breed_detail_description), breed!!.description)
+                            }
+                        }
                     }
                 }
             }
