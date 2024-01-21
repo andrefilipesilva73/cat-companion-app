@@ -61,6 +61,11 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.ui.graphics.Color
 import com.catcompanion.app.viewmodel.IBreedViewModel
 
+enum class BreedsListType {
+    Breeds,
+    Favorites
+}
+
 private fun navigateToBreedDetail(navController: NavHostController, breed: Breed) {
     // Use the navigation controller to navigate to the "breedDetailScreen/{breedId}" destination
     navController.navigate("breedDetailScreen/${breed.id}") {
@@ -189,7 +194,7 @@ fun SearchLine(navController: NavHostController, breed: Breed) {
 // Declare a composable function that represents the UI for the BreedsListScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BreedsList(navController: NavHostController, viewModel: IBreedViewModel) {
+fun BreedsList(navController: NavHostController, viewModel: IBreedViewModel, type: BreedsListType) {
     // Collecting states from ViewModel
     val pagingData = viewModel.breeds.collectAsLazyPagingItems()
     val searchText by viewModel.searchText.collectAsState()
