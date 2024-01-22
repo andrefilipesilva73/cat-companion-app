@@ -26,8 +26,17 @@ class BreedDetailViewModel(private val breedRepository: BreedRepository) : ViewM
             try {
                 _isLoadingSelectedBreed.value = true // Set loading state to true
 
+                // Get
                 val selectedBreedById = breedRepository.getBreedById(breedId)
+
+                // Update selection
                 _selectedBreed.value = selectedBreedById
+
+                // Update on database
+                if (selectedBreedById != null) {
+                    // Do it
+                    breedRepository.updateDatabase(listOf(selectedBreedById));
+                }
             } catch (exception: Exception) {
                 // Handle errors (e.g., network issues)
                 exception.printStackTrace()
