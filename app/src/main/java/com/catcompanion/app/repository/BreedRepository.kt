@@ -140,8 +140,11 @@ class BreedRepository (private val breedDao: BreedDao) {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
 
-            // Return the default breeds in case of an error
-            throw e
+            // Let's give it another change
+            withContext(Dispatchers.IO) {
+                // Fetch breeds from the Database
+                return@withContext breedDao.searchBreedsByName(breedName)
+            }
         }
     }
 
