@@ -57,10 +57,10 @@ import com.catcompanion.app.repository.BreedRepository
 import com.catcompanion.app.viewmodel.BreedDetailViewModel
 
 @Composable
-fun BreedDetailLine(title: String, text: String) {
+fun BreedDetailLine(title: String, text: String, testTag: String) {
     Column {
-        Text(text = title, fontSize = MaterialTheme.typography.titleMedium.fontSize, fontWeight = FontWeight.Bold)
-        Text(text = text)
+        Text(text = title, fontSize = MaterialTheme.typography.titleMedium.fontSize, fontWeight = FontWeight.Bold, modifier = Modifier.testTag("${testTag}_title"))
+        Text(text = text, modifier = Modifier.testTag("${testTag}_value"))
     }
 }
 
@@ -125,11 +125,12 @@ fun BreedDetailScreen(navController: NavHostController, breedId: String) {
                         Text(
                             breed!!.name,
                             overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.testTag("breed_detail_screen_name")
                         )
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStack() }, modifier = Modifier.testTag("breed_detail_screen_back_button")) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
                     }
                 },
@@ -149,7 +150,9 @@ fun BreedDetailScreen(navController: NavHostController, breedId: String) {
 
                                 // Update local state
                                 isFavorite = false
-                            }) {
+                            },
+                                modifier = Modifier.testTag("breed_detail_screen_favorite_button")
+                            ) {
                                 Icon(
                                     imageVector = Icons.Filled.Star,
                                     contentDescription = null
@@ -166,7 +169,9 @@ fun BreedDetailScreen(navController: NavHostController, breedId: String) {
 
                                 // Update local state
                                 isFavorite = true
-                            }) {
+                            },
+                                modifier = Modifier.testTag("breed_detail_screen_favorite_button")
+                            ) {
                                 Icon(
                                     imageVector = Icons.Outlined.StarOutline,
                                     contentDescription = null
@@ -213,12 +218,14 @@ fun BreedDetailScreen(navController: NavHostController, breedId: String) {
                                     contentDescription = breed!!.name,
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
+                                        .testTag("breed_detail_screen_image")
                                         .fillMaxWidth()
                                         .aspectRatio(4 / 3f)
                                 )
                             } else {
                                 Column(
                                     modifier = Modifier
+                                        .testTag("breed_detail_screen_image")
                                         .fillMaxWidth()
                                         .aspectRatio(4 / 3f)
                                         .background(Color.LightGray),
@@ -232,15 +239,15 @@ fun BreedDetailScreen(navController: NavHostController, breedId: String) {
                                 modifier = Modifier.padding(12.dp)
                             ) {
                                 Spacer(modifier = Modifier.height(4.dp)) // Add vertical space
-                                BreedDetailLine(stringResource(id = R.string.breed_detail_name), breed!!.name)
+                                BreedDetailLine(stringResource(id = R.string.breed_detail_name), breed!!.name, "breed_detail_screen_form_name")
                                 Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                                BreedDetailLine(stringResource(id = R.string.breed_detail_origin), breed!!.origin)
+                                BreedDetailLine(stringResource(id = R.string.breed_detail_origin), breed!!.origin, "breed_detail_screen_form_origin")
                                 Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                                BreedDetailLine(stringResource(id = R.string.breed_detail_temperament), breed!!.temperament)
+                                BreedDetailLine(stringResource(id = R.string.breed_detail_temperament), breed!!.temperament, "breed_detail_screen_form_temperament")
                                 Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                                BreedDetailLine(stringResource(id = R.string.breed_detail_description), breed!!.description)
+                                BreedDetailLine(stringResource(id = R.string.breed_detail_description), breed!!.description, "breed_detail_screen_form_description")
                                 Spacer(modifier = Modifier.height(16.dp)) // Add vertical space
-                                BreedDetailLine(stringResource(id = R.string.breed_detail_life_span), stringResource(id = R.string.breed_life_span_years, breed!!.lifeSpan))
+                                BreedDetailLine(stringResource(id = R.string.breed_detail_life_span), stringResource(id = R.string.breed_life_span_years, breed!!.lifeSpan), "breed_detail_screen_form_life_span")
                             }
                         }
                     }

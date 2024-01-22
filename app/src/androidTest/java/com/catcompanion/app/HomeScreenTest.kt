@@ -29,23 +29,6 @@ class HomeScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private fun markBreedAsFavorite() {
-        // Start the app
-        composeTestRule.setContent {
-            // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
-            val navController = rememberNavController()
-
-            // Call the entry point composable function
-            Home(navController)
-        }
-
-        // Wait for loadings to end
-        Thread.sleep(5000)
-
-        // Turn card on a Favorite
-        composeTestRule.onAllNodesWithTag("favorite_button")[0].performClick()
-    }
-
     @Test
     fun testBottomNavigationBarNavigation() {
         // Start the app
