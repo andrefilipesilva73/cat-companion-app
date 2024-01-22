@@ -104,6 +104,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-paging:2.6.1")
+    implementation("androidx.navigation:navigation-testing:2.7.6")
     ksp("androidx.room:room-compiler:2.6.1")
 
     // Test implementation dependencies

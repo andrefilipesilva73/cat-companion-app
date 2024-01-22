@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
@@ -37,7 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 // Annotate the function to opt into using ExperimentalMaterial3Api
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
+fun Home(mainNavController: NavHostController) {
     // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
     val navController = rememberNavController()
 
@@ -53,6 +54,7 @@ fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
     // Content goes here
     Scaffold(
         modifier = Modifier
+            .testTag("home_screen")
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             // TopAppBar goes here
@@ -77,7 +79,10 @@ fun Home(mainNavController: NavHostController, modifier: Modifier = Modifier) {
         },
         bottomBar = {
             // Bottom Navigation bar
-            NavigationBar(modifier = Modifier.fillMaxWidth()) {
+            NavigationBar(modifier = Modifier
+                .testTag("bottom_navigation_bar")
+                .fillMaxWidth()
+            ) {
                 // List item
                 NavigationBarItem(
                     selected = currentRoute == "breedsListScreen",

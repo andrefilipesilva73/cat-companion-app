@@ -6,6 +6,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -38,6 +41,7 @@ fun Main() {
 
     // Content goes here, create the NavHost
     NavHost(
+        modifier = Modifier.testTag("main_nav_host"),
         navController = navController,
         startDestination = "home",
     ) {
