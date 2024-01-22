@@ -150,9 +150,6 @@ fun BreedCard(navController: NavHostController, viewModel: BaseBreedViewModel, b
             OutlinedIconButton(
                 onClick =
                 {
-                    // Update local state
-                    isFavorite = !isFavorite
-
                     if (isFavorite) {
                         // Remove from favorites
                         viewModel.removeBreedFromFavorites(breed)
@@ -171,6 +168,9 @@ fun BreedCard(navController: NavHostController, viewModel: BaseBreedViewModel, b
                         Toast.makeText(context, "$addedToFavoritesLabel ⭐️", Toast.LENGTH_SHORT)
                             .show()
                     }
+
+                    // Update local state
+                    isFavorite = !isFavorite
                 },
                 modifier = Modifier.size(50.dp), // avoid the oval shape
                 shape = CircleShape,

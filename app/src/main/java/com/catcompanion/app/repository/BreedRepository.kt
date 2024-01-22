@@ -67,12 +67,19 @@ class BreedRepository (private val breedDao: BreedDao) {
         }
     }
 
-    private suspend fun fetchImageUrlsParallel(breeds: List<BreedCatApi>): List<Breed> {
+    private suspend fun mapApiResponse(breeds: List<BreedCatApi>): List<Breed> {
         return coroutineScope {
             // Use async to fetch image URLs in parallel
             val imageUrlsDeferred = breeds.map { apiBreed ->
                 async {
                     getImageUrl(apiBreed.reference_image_id, apiBreed.id)
+                }
+            }
+
+            // Use async to fetch favorite status from Room database
+            val favoritesDeferred = breeds.map { apiBreed ->
+                async {
+                    breedDao.isFavorite(apiBreed.id) // Assuming you have a function in BreedDao to check if a breed is favorite
                 }
             }
 
@@ -85,7 +92,7 @@ class BreedRepository (private val breedDao: BreedDao) {
                     apiBreed.origin,
                     apiBreed.description,
                     imageUrlsDeferred[index].await(),
-                    false
+                    favoritesDeferred[index].await()
                 )
             }
 
@@ -100,7 +107,7 @@ class BreedRepository (private val breedDao: BreedDao) {
             val response = catApiService.getBreeds(limit, page)
 
             // Use the fetchImageUrlsParallel function
-            fetchImageUrlsParallel(response)
+            mapApiResponse(response)
         } catch (e: Exception) {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
@@ -116,7 +123,7 @@ class BreedRepository (private val breedDao: BreedDao) {
             val response = catApiService.getBreedsBySearch(breedName, 1)
 
             // Use the fetchImageUrlsParallel function
-            fetchImageUrlsParallel(response)
+            mapApiResponse(response)
         } catch (e: Exception) {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
@@ -132,7 +139,7 @@ class BreedRepository (private val breedDao: BreedDao) {
             val response = listOf(catApiService.getBreedById(breedId))
 
             // Use the fetchImageUrlsParallel function
-            val breeds = fetchImageUrlsParallel(response)
+            val breeds = mapApiResponse(response)
 
             // Return the first breed, or null if the list is empty
             breeds.firstOrNull()

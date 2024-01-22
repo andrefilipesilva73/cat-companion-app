@@ -25,4 +25,7 @@ interface BreedDao {
 
     @Query("SELECT * FROM breeds WHERE isFavorite = 1 ORDER BY name ASC LIMIT :limit OFFSET :offset")
     fun getPagedFavoriteBreeds(limit: Int, offset: Int): List<Breed>
+
+    @Query("SELECT isFavorite FROM breeds WHERE id = :breedId")
+    suspend fun isFavorite(breedId: String): Boolean
 }
