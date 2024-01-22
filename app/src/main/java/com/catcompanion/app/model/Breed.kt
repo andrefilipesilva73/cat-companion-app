@@ -14,6 +14,7 @@ data class Breed (
     var temperament: String,
     var origin: String,
     var description: String,
+    var lifeSpan: String,
     var imageUrl: String,
     var isFavorite: Boolean
 )

@@ -145,7 +145,11 @@ fun BreedCard(navController: NavHostController, viewModel: BaseBreedViewModel, b
                     .padding(12.dp)
             ) {
                 Text(text = breed.name, fontWeight = FontWeight.Bold)
-                Text(text = breed.temperament)
+                if (type == BreedsListType.Breeds) {
+                    Text(text = breed.temperament)
+                } else if (type == BreedsListType.Favorites) {
+                    Text(text = stringResource(id = R.string.favorite_breed_life_span_years, breed.lifeSpan))
+                }
             }
             OutlinedIconButton(
                 onClick =

@@ -12,4 +12,5 @@
     <string name="breed_detail_description">Description</string>
     <string name="added_to_favorites">Added to Favorites</string>
     <string name="removed_from_favorites">Removed from Favorites</string>
+    <string name="favorite_breed_life_span_years">%s years</string>
 </resources>

@@ -91,6 +91,7 @@ class BreedRepository (private val breedDao: BreedDao) {
                     apiBreed.temperament,
                     apiBreed.origin,
                     apiBreed.description,
+                    apiBreed.life_span,
                     imageUrlsDeferred[index].await(),
                     favoritesDeferred[index].await()
                 )

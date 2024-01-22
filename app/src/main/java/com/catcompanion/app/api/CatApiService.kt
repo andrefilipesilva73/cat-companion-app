@@ -11,6 +11,7 @@ data class BreedCatApi (
     val temperament: String,
     val origin: String,
     val description: String,
+    val life_span: String,
     var reference_image_id: String?
 )
 
