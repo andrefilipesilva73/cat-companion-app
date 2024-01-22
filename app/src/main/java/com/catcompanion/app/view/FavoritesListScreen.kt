@@ -19,7 +19,7 @@ fun FavoritesListScreen(navController: NavHostController) {
 
     // Create View model
     val viewModel = remember {
-        BreedViewModel(
+        FavoriteViewModel(
             BreedRepository(
                 AppDatabase.getInstance(context).breedDao()
             )

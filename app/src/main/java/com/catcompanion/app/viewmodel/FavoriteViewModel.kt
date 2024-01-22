@@ -26,7 +26,7 @@ class FavoritePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Breed> {
         return try {
             val currentPage = params.key ?: 1
-            val response = breedRepository.getBreedsByPages(10, currentPage - 1)
+            val response = breedRepository.getFavoritesByPages(10, currentPage - 1)
             LoadResult.Page(
                 data = response,
                 prevKey = if (currentPage == 1) null else currentPage - 1,
@@ -131,11 +131,9 @@ class FavoriteViewModel(private val breedRepository: BreedRepository) : ViewMode
         }
     }
 
-    override fun addBreedToFavorites(breedId: String) {
-
+    override fun addBreedToFavorites(breed: Breed) {
     }
 
-    override fun removeBreedFromFavorites(breedId: String) {
-
+    override fun removeBreedFromFavorites(breed: Breed) {
     }
 }

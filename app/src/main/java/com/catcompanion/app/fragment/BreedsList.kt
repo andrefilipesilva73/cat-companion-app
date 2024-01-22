@@ -58,6 +58,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.CardDefaults
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.catcompanion.app.viewmodel.IBreedViewModel
@@ -88,6 +91,9 @@ fun BreedCard(navController: NavHostController, viewModel: IBreedViewModel, bree
     val addedToFavoritesLabel = stringResource(id = R.string.added_to_favorites)
     val removedFromFavoritesLabel = stringResource(id = R.string.removed_from_favorites)
 
+    // Local state to track the favorite status
+    var isFavorite by remember { mutableStateOf(breed.isFavorite) }
+
     // Build
     Card(
         modifier = Modifier
@@ -95,7 +101,7 @@ fun BreedCard(navController: NavHostController, viewModel: IBreedViewModel, bree
             .fillMaxWidth()
             .heightIn(0.dp, 256.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (breed.isFavorite) { MaterialTheme.colorScheme.primary } else { MaterialTheme.colorScheme.surfaceVariant },
+            containerColor = if (isFavorite) { MaterialTheme.colorScheme.primary } else { MaterialTheme.colorScheme.surfaceVariant },
         ),
         onClick = {
             navigateToBreedDetail(navController, breed)
@@ -144,18 +150,26 @@ fun BreedCard(navController: NavHostController, viewModel: IBreedViewModel, bree
             OutlinedIconButton(
                 onClick =
                 {
-                    if (breed.isFavorite) {
+                    // Update local state
+                    isFavorite = !isFavorite
+
+                    if (isFavorite) {
                         // Remove from favorites
-                        viewModel.removeBreedFromFavorites(breed.id)
+                        viewModel.removeBreedFromFavorites(breed)
 
                         // Show confirmation
-                        Toast.makeText(context, "$removedFromFavoritesLabel ❌️", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "$removedFromFavoritesLabel ❌️",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
                         // Add to Favorites
-                        viewModel.addBreedToFavorites(breed.id)
+                        viewModel.addBreedToFavorites(breed)
 
                         // Show confirmation
-                        Toast.makeText(context, "$addedToFavoritesLabel ⭐️", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "$addedToFavoritesLabel ⭐️", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 },
                 modifier = Modifier.size(50.dp), // avoid the oval shape
@@ -163,7 +177,7 @@ fun BreedCard(navController: NavHostController, viewModel: IBreedViewModel, bree
                 border = BorderStroke(0.dp, MaterialTheme.colorScheme.surface),
                 colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.surface, contentColor = MaterialTheme.colorScheme.outline)
             ) {
-                if (breed.isFavorite) {
+                if (isFavorite) {
                     Icon(Icons.Filled.Star, contentDescription = "Favorite")
                 } else {
                     Icon(Icons.Outlined.StarOutline, contentDescription = "Favorite")

@@ -1,5 +1,6 @@
 package com.catcompanion.app.db
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -21,4 +22,7 @@ interface BreedDao {
 
     @Query("SELECT * FROM breeds")
     suspend fun getAll(): List<Breed>
+
+    @Query("SELECT * FROM breeds WHERE isFavorite = 1 ORDER BY name ASC LIMIT :limit OFFSET :offset")
+    fun getPagedFavoriteBreeds(limit: Int, offset: Int): List<Breed>
 }

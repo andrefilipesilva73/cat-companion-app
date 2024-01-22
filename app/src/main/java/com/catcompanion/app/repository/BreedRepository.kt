@@ -5,6 +5,7 @@ import com.catcompanion.app.api.BreedCatApi
 import com.catcompanion.app.api.CatApiService
 import com.catcompanion.app.db.BreedDao
 import com.catcompanion.app.model.Breed
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -17,6 +18,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class BreedRepository (private val breedDao: BreedDao) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
     // Cat API Service
     private val catApiService: CatApiService by lazy {
         // Define the interceptor, add authentication headers
@@ -143,15 +146,54 @@ class BreedRepository (private val breedDao: BreedDao) {
     }
 
     suspend fun addBreedToFavorites(breed: Breed) {
-        // Save on Local Database
-        breed.isFavorite = true
-        breedDao.insertOrUpdate(breed)
+        coroutineScope.launch(Dispatchers.IO) {
+            // Save on Local Database
+            breed.isFavorite = true
+
+            try {
+                breedDao.insertOrUpdate(breed)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     suspend fun removeBreedFromFavorites(breed: Breed) {
-        // Save on Local Database
-        breed.isFavorite = false
-        breedDao.insertOrUpdate(breed)
+        coroutineScope.launch(Dispatchers.IO) {
+            // Save on Local Database
+            breed.isFavorite = false
+
+            try {
+                breedDao.insertOrUpdate(breed)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    suspend fun getFavoritesByPages(limit: Int, page: Int): List<Breed> {
+        try {
+            return withContext(Dispatchers.IO) {
+                // Fetch breeds from the API
+                try {
+                    val response = breedDao.getPagedFavoriteBreeds(limit, page * limit)
+
+                    // Ready
+                    response
+                } catch (e: Exception) {
+                    e.printStackTrace()
+
+                    // Return nothing
+                    emptyList()
+                }
+            }
+        } catch (e: Exception) {
+            // Handle errors (e.g., network issues)
+            e.printStackTrace()
+
+            // Return the default breeds in case of an error
+            throw e
+        }
     }
 
 }

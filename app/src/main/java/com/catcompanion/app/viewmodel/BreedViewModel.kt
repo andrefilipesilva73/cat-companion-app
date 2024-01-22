@@ -49,8 +49,6 @@ class BreedPagingSource(
 }
 
 class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel(), IBreedViewModel {
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
     // Breeds
     private val _breedResponse: MutableStateFlow<PagingData<Breed>> =
         MutableStateFlow(PagingData.empty())
@@ -136,13 +134,10 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
         }
     }
 
-    override fun addBreedToFavorites(breedId: String) {
-        var breed: Breed? = null
-
+    override fun addBreedToFavorites(breed: Breed) {
         // Find and update the breed in breeds
         _breedResponse.value = _breedResponse.value.map {
-            if (it.id == breedId) {
-                breed = it
+            if (it.id == breed.id) {
                 it.copy(isFavorite = true)
             } else {
                 it
@@ -151,30 +146,23 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
 
         // Find and update the breed in searchResultsList
         _searchResultsList.value = _searchResultsList.value.map {
-            if (it.id == breedId) {
-                breed = it
+            if (it.id == breed.id) {
                 it.copy(isFavorite = true)
             } else {
                 it
             }
         }
 
-        // Evaluate
-        if (breed != null) {
-            // Update
-            coroutineScope.launch(Dispatchers.IO) {
-                breedRepository.addBreedToFavorites(breed!!);
-            }
+        // Update
+        viewModelScope.launch {
+            breedRepository.addBreedToFavorites(breed);
         }
     }
 
-    override fun removeBreedFromFavorites(breedId: String) {
-        var breed: Breed? = null
-
+    override fun removeBreedFromFavorites(breed: Breed) {
         // Find and update the breed in breeds
         _breedResponse.value = _breedResponse.value.map {
-            if (it.id == breedId) {
-                breed = it
+            if (it.id == breed.id) {
                 it.copy(isFavorite = false)
             } else {
                 it
@@ -183,19 +171,16 @@ class BreedViewModel(private val breedRepository: BreedRepository) : ViewModel()
 
         // Find and update the breed in searchResultsList
         _searchResultsList.value = _searchResultsList.value.map {
-            if (it.id == breedId) {
-                breed = it
+            if (it.id == breed.id) {
                 it.copy(isFavorite = false)
             } else {
                 it
             }
         }
 
-        // Evaluate
-        if (breed != null) {
-            coroutineScope.launch(Dispatchers.IO) {
-                breedRepository.removeBreedFromFavorites(breed!!);
-            }
+        // Update
+        viewModelScope.launch {
+            breedRepository.removeBreedFromFavorites(breed);
         }
     }
 }
