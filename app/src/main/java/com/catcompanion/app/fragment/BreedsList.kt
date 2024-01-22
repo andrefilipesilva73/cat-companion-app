@@ -63,6 +63,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import com.catcompanion.app.viewmodel.BaseBreedViewModel
 
 enum class BreedsListType {
@@ -77,6 +78,34 @@ private fun navigateToBreedDetail(navController: NavHostController, breed: Breed
         launchSingleTop = true // Launch as a single top-level destination
         popUpTo(navController.graph.startDestinationId) {
             saveState = true // Save the state of the popped destinations
+        }
+    }
+}
+
+@Composable
+fun BreedImageAvatar(breed: Breed, size: Dp) {
+    // Evaluate image
+    if (breed.imageUrl != "") {
+        AsyncImage(
+            model = breed.imageUrl,
+            contentDescription = breed.name,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .width(size)
+                .height(size)
+                .clip(RoundedCornerShape(size)),
+        )
+    } else {
+        Column(
+            modifier = Modifier
+                .width(size)
+                .height(size)
+                .clip(RoundedCornerShape(size))
+                .background(Color.LightGray),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(Icons.Outlined.BrokenImage, contentDescription = null)
         }
     }
 }
@@ -115,30 +144,7 @@ fun BreedCard(navController: NavHostController, viewModel: BaseBreedViewModel, b
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (breed.imageUrl != "") {
-                AsyncImage(
-                    model = breed.imageUrl,
-                    contentDescription = breed.name,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(100.dp)
-                        .clip(RoundedCornerShape(100.dp)),
-                )
-            } else {
-                Column(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(100.dp)
-                        .clip(RoundedCornerShape(100.dp))
-                        .background(Color.LightGray),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Icon(Icons.Outlined.BrokenImage, contentDescription = null)
-                }
-            }
-
+            BreedImageAvatar(breed, 100.dp)
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -203,33 +209,7 @@ fun SearchLine(navController: NavHostController, breed: Breed) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (breed.imageUrl != "") {
-            AsyncImage(
-                model = breed.imageUrl,
-                contentDescription = breed.name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(32.dp)
-                    .height(32.dp)
-                    .clip(RoundedCornerShape(32.dp)),
-            )
-        } else {
-            Column(
-                modifier = Modifier
-                    .width(32.dp)
-                    .height(32.dp)
-                    .clip(RoundedCornerShape(32.dp))
-                    .border(
-                        BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                        CircleShape
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Icon(Icons.Outlined.BrokenImage, contentDescription = null)
-            }
-        }
-
+        BreedImageAvatar(breed, 32.dp)
         Column(
             modifier = Modifier
                 .weight(1f)
