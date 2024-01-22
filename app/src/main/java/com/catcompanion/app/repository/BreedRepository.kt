@@ -61,8 +61,16 @@ class BreedRepository (private val breedDao: BreedDao) {
                 // For debugging, print the exception message
                 println("Exception while fetching image URL: ${e.message}")
 
-                // Return a default value or rethrow the exception
-                return@withContext ""
+                // Look for a previous link on the database
+                val breed = breedDao.getById(breedId)
+
+                // Evaluate
+                if (breed != null && breed.imageUrl != "") {
+                    return@withContext breed.imageUrl
+                } else {
+                    // Return a default value or rethrow the exception
+                    return@withContext ""
+                }
             }
         }
     }
@@ -226,6 +234,16 @@ class BreedRepository (private val breedDao: BreedDao) {
 
             // Return the default breeds in case of an error
             throw e
+        }
+    }
+
+    suspend fun updateDatabase(breeds: List<Breed>) {
+        coroutineScope.launch(Dispatchers.IO) {
+            try {
+                breedDao.insertOrUpdateMany(breeds)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

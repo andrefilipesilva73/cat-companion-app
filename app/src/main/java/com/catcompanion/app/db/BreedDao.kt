@@ -18,8 +18,14 @@ interface BreedDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(breed: Breed)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrUpdateMany(breeds: List<Breed>)
+
     @Query("SELECT * FROM breeds")
     suspend fun getAll(): List<Breed>
+
+    @Query("SELECT * FROM breeds WHERE id = :breedId")
+    suspend fun getById(breedId: String): Breed?
 
     @Query("SELECT * FROM breeds WHERE isFavorite = 1 ORDER BY name ASC LIMIT :limit OFFSET :offset")
     fun getPagedFavoriteBreeds(limit: Int, offset: Int): List<Breed>

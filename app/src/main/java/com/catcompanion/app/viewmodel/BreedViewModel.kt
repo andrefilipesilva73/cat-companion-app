@@ -18,8 +18,16 @@ class BreedPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Breed> {
         return try {
+            // Map page
             val currentPage = params.key ?: 1
+
+            // Obtain page
             val response = breedRepository.getBreedsByPages(10, currentPage - 1)
+
+            // Persist data on the database for offline usage
+            breedRepository.updateDatabase(response)
+
+            // Map result
             LoadResult.Page(
                 data = response,
                 prevKey = if (currentPage == 1) null else currentPage - 1,
