@@ -2,6 +2,7 @@ package com.catcompanion.app.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.map
 import com.catcompanion.app.model.Breed
 import com.catcompanion.app.repository.BreedRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +38,26 @@ class BreedDetailViewModel(private val breedRepository: BreedRepository) : ViewM
             } finally {
                 _isLoadingSelectedBreed.value = false // Set loading state to false after the operation is complete
             }
+        }
+    }
+
+    fun addBreedToFavorites(breed: Breed) {
+        // Update
+        selectedBreed.value?.isFavorite = true
+
+        // Update
+        viewModelScope.launch {
+            breedRepository.addBreedToFavorites(breed);
+        }
+    }
+
+    fun removeBreedFromFavorites(breed: Breed) {
+        // Update
+        selectedBreed.value?.isFavorite = false
+
+        // Update
+        viewModelScope.launch {
+            breedRepository.removeBreedFromFavorites(breed);
         }
     }
 }
