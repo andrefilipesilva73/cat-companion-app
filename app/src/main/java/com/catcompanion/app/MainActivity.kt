@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,7 +32,7 @@ class MainActivity : ComponentActivity() {
 
 // Declare a composable function Main, taking an optional modifier
 @Composable
-fun Main(modifier: Modifier = Modifier) {
+fun Main() {
     // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
     val navController = rememberNavController()
 
