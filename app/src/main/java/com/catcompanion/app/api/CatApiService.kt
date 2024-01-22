@@ -1,6 +1,5 @@
 package com.catcompanion.app.api
 
-import com.catcompanion.app.model.Breed
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -11,6 +10,7 @@ data class BreedCatApi (
     val temperament: String,
     val origin: String,
     val description: String,
+    val life_span: String,
     var reference_image_id: String?
 )
 

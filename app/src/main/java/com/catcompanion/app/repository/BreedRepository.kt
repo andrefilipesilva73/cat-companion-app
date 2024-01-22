@@ -1,13 +1,15 @@
 package com.catcompanion.app.repository
 
-import android.util.Log
 import com.catcompanion.app.BuildConfig
 import com.catcompanion.app.api.BreedCatApi
 import com.catcompanion.app.api.CatApiService
+import com.catcompanion.app.db.BreedDao
 import com.catcompanion.app.model.Breed
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -15,8 +17,9 @@ import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+class BreedRepository (private val breedDao: BreedDao) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-class BreedRepository {
     // Cat API Service
     private val catApiService: CatApiService by lazy {
         // Define the interceptor, add authentication headers
@@ -58,18 +61,33 @@ class BreedRepository {
                 // For debugging, print the exception message
                 println("Exception while fetching image URL: ${e.message}")
 
-                // Return a default value or rethrow the exception
-                return@withContext ""
+                // Look for a previous link on the database
+                val breed = breedDao.getById(breedId)
+
+                // Evaluate
+                if (breed != null && breed.imageUrl != "") {
+                    return@withContext breed.imageUrl
+                } else {
+                    // Return a default value or rethrow the exception
+                    return@withContext ""
+                }
             }
         }
     }
 
-    private suspend fun fetchImageUrlsParallel(breeds: List<BreedCatApi>): List<Breed> {
+    private suspend fun mapApiResponse(breeds: List<BreedCatApi>): List<Breed> {
         return coroutineScope {
             // Use async to fetch image URLs in parallel
             val imageUrlsDeferred = breeds.map { apiBreed ->
                 async {
                     getImageUrl(apiBreed.reference_image_id, apiBreed.id)
+                }
+            }
+
+            // Use async to fetch favorite status from Room database
+            val favoritesDeferred = breeds.map { apiBreed ->
+                async {
+                    breedDao.isFavorite(apiBreed.id) // Assuming you have a function in BreedDao to check if a breed is favorite
                 }
             }
 
@@ -81,7 +99,9 @@ class BreedRepository {
                     apiBreed.temperament,
                     apiBreed.origin,
                     apiBreed.description,
-                    imageUrlsDeferred[index].await()
+                    apiBreed.life_span,
+                    imageUrlsDeferred[index].await(),
+                    favoritesDeferred[index].await()
                 )
             }
 
@@ -96,13 +116,16 @@ class BreedRepository {
             val response = catApiService.getBreeds(limit, page)
 
             // Use the fetchImageUrlsParallel function
-            fetchImageUrlsParallel(response)
+            mapApiResponse(response)
         } catch (e: Exception) {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
 
-            // Return the default breeds in case of an error
-            throw e
+            // Let's give it another change
+            withContext(Dispatchers.IO) {
+                // Fetch breeds from the Database
+                return@withContext breedDao.getPagedBreeds(limit, page * limit)
+            }
         }
     }
 
@@ -112,13 +135,16 @@ class BreedRepository {
             val response = catApiService.getBreedsBySearch(breedName, 1)
 
             // Use the fetchImageUrlsParallel function
-            fetchImageUrlsParallel(response)
+            mapApiResponse(response)
         } catch (e: Exception) {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
 
-            // Return the default breeds in case of an error
-            throw e
+            // Let's give it another change
+            withContext(Dispatchers.IO) {
+                // Fetch breeds from the Database
+                return@withContext breedDao.searchBreedsByName(breedName)
+            }
         }
     }
 
@@ -128,7 +154,7 @@ class BreedRepository {
             val response = listOf(catApiService.getBreedById(breedId))
 
             // Use the fetchImageUrlsParallel function
-            val breeds = fetchImageUrlsParallel(response)
+            val breeds = mapApiResponse(response)
 
             // Return the first breed, or null if the list is empty
             breeds.firstOrNull()
@@ -136,10 +162,98 @@ class BreedRepository {
             // Handle errors (e.g., network issues)
             e.printStackTrace()
 
-            // Return null in case of an error
-            null
+            // Let's give it another change
+            withContext(Dispatchers.IO) {
+                // Fetch breeds from the Database
+                return@withContext breedDao.getById(breedId)
+            }
         }
     }
 
+    suspend fun addBreedToFavorites(breed: Breed) {
+        coroutineScope.launch(Dispatchers.IO) {
+            // Save on Local Database
+            breed.isFavorite = true
+
+            try {
+                breedDao.insertOrUpdate(breed)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    suspend fun removeBreedFromFavorites(breed: Breed) {
+        coroutineScope.launch(Dispatchers.IO) {
+            // Save on Local Database
+            breed.isFavorite = false
+
+            try {
+                breedDao.insertOrUpdate(breed)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    suspend fun getFavoritesByPages(limit: Int, page: Int): List<Breed> {
+        try {
+            return withContext(Dispatchers.IO) {
+                // Fetch breeds from the API
+                try {
+                    val response = breedDao.getPagedFavoriteBreeds(limit, page * limit)
+
+                    // Ready
+                    response
+                } catch (e: Exception) {
+                    e.printStackTrace()
+
+                    // Return nothing
+                    emptyList()
+                }
+            }
+        } catch (e: Exception) {
+            // Handle errors (e.g., network issues)
+            e.printStackTrace()
+
+            // Return the default breeds in case of an error
+            throw e
+        }
+    }
+
+    suspend fun getFavoritesBySearch(breedName: String): List<Breed> {
+        try {
+            return withContext(Dispatchers.IO) {
+                // Fetch breeds from the API
+                try {
+                    val response = breedDao.searchFavoritesByName(breedName)
+
+                    // Ready
+                    response
+                } catch (e: Exception) {
+                    e.printStackTrace()
+
+                    // Return nothing
+                    emptyList()
+                }
+            }
+        } catch (e: Exception) {
+            // Handle errors (e.g., network issues)
+            e.printStackTrace()
+
+            // Return the default breeds in case of an error
+            throw e
+        }
+    }
+
+    suspend fun updateDatabase(breeds: List<Breed>) {
+        coroutineScope.launch(Dispatchers.IO) {
+            try {
+                breedDao.insertOrUpdateMany(breeds)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
 }

@@ -26,8 +26,17 @@ class BreedDetailViewModel(private val breedRepository: BreedRepository) : ViewM
             try {
                 _isLoadingSelectedBreed.value = true // Set loading state to true
 
+                // Get
                 val selectedBreedById = breedRepository.getBreedById(breedId)
+
+                // Update selection
                 _selectedBreed.value = selectedBreedById
+
+                // Update on database
+                if (selectedBreedById != null) {
+                    // Do it
+                    breedRepository.updateDatabase(listOf(selectedBreedById));
+                }
             } catch (exception: Exception) {
                 // Handle errors (e.g., network issues)
                 exception.printStackTrace()
@@ -37,6 +46,26 @@ class BreedDetailViewModel(private val breedRepository: BreedRepository) : ViewM
             } finally {
                 _isLoadingSelectedBreed.value = false // Set loading state to false after the operation is complete
             }
+        }
+    }
+
+    fun addBreedToFavorites(breed: Breed) {
+        // Update
+        selectedBreed.value?.isFavorite = true
+
+        // Update
+        viewModelScope.launch {
+            breedRepository.addBreedToFavorites(breed);
+        }
+    }
+
+    fun removeBreedFromFavorites(breed: Breed) {
+        // Update
+        selectedBreed.value?.isFavorite = false
+
+        // Update
+        viewModelScope.launch {
+            breedRepository.removeBreedFromFavorites(breed);
         }
     }
 }

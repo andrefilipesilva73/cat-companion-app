@@ -2,6 +2,7 @@
 plugins {
     id("com.android.application") // Apply the Android application plugin
     id("org.jetbrains.kotlin.android") // Apply the Kotlin Android plugin
+    id("com.google.devtools.ksp") // Make "Room" work
 }
 
 // Android block containing configuration for the Android build
@@ -102,6 +103,8 @@ dependencies {
     // Room dependencies
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-paging:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
     // Test implementation dependencies
     testImplementation("junit:junit:4.13.2")

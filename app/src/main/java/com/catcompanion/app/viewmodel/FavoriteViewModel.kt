@@ -12,22 +12,14 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class BreedPagingSource(
+class FavoritePagingSource(
     private val breedRepository: BreedRepository,
 ) : PagingSource<Int, Breed>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Breed> {
         return try {
-            // Map page
             val currentPage = params.key ?: 1
-
-            // Obtain page
-            val response = breedRepository.getBreedsByPages(10, currentPage - 1)
-
-            // Persist data on the database for offline usage
-            breedRepository.updateDatabase(response)
-
-            // Map result
+            val response = breedRepository.getFavoritesByPages(10, currentPage - 1)
             LoadResult.Page(
                 data = response,
                 prevKey = if (currentPage == 1) null else currentPage - 1,
@@ -46,7 +38,7 @@ class BreedPagingSource(
 
 }
 
-class BreedViewModel(private val breedRepository: BreedRepository) : BaseBreedViewModel(breedRepository) {
+class FavoriteViewModel(private val breedRepository: BreedRepository) : BaseBreedViewModel(breedRepository) {
     init {
         fetchData()
     }
@@ -58,7 +50,7 @@ class BreedViewModel(private val breedRepository: BreedRepository) : BaseBreedVi
                     10, enablePlaceholders = true
                 )
             ) {
-                BreedPagingSource(breedRepository)
+                FavoritePagingSource(breedRepository)
             }.flow.cachedIn(viewModelScope).collect {
                 _breedResponse.value = it
             }
@@ -69,7 +61,7 @@ class BreedViewModel(private val breedRepository: BreedRepository) : BaseBreedVi
         viewModelScope.launch {
             try {
                 // Perform the search using the repository
-                val searchResults = breedRepository.getBreedsBySearch(_searchText.value)
+                val searchResults = breedRepository.getFavoritesBySearch(_searchText.value)
 
                 // Update the search results list
                 _searchResultsList.value = searchResults
