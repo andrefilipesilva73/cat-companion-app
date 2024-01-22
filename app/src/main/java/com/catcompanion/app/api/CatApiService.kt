@@ -1,6 +1,5 @@
 package com.catcompanion.app.api
 
-import com.catcompanion.app.model.Breed
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

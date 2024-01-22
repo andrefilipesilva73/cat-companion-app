@@ -9,7 +9,6 @@ import com.catcompanion.app.db.AppDatabase
 import com.catcompanion.app.fragment.BreedsList
 import com.catcompanion.app.fragment.BreedsListType
 import com.catcompanion.app.repository.BreedRepository
-import com.catcompanion.app.viewmodel.BreedViewModel
 import com.catcompanion.app.viewmodel.FavoriteViewModel
 
 @Composable

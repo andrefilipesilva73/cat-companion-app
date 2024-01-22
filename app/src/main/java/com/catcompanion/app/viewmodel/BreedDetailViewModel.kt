@@ -2,7 +2,6 @@ package com.catcompanion.app.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.map
 import com.catcompanion.app.model.Breed
 import com.catcompanion.app.repository.BreedRepository
 import kotlinx.coroutines.flow.MutableStateFlow
