@@ -127,6 +127,7 @@ fun BreedCard(navController: NavHostController, viewModel: BaseBreedViewModel, b
     // Build
     Card(
         modifier = Modifier
+            .testTag(if (type == BreedsListType.Breeds) { "breed_card" } else { "favorite_card" })
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .heightIn(0.dp, 256.dp),
@@ -159,6 +160,9 @@ fun BreedCard(navController: NavHostController, viewModel: BaseBreedViewModel, b
                 }
             }
             OutlinedIconButton(
+                modifier = Modifier
+                    .testTag("favorite_button")
+                    .size(50.dp), // avoid the oval shape
                 onClick =
                 {
                     if (isFavorite) {
@@ -183,7 +187,6 @@ fun BreedCard(navController: NavHostController, viewModel: BaseBreedViewModel, b
                     // Update local state
                     isFavorite = !isFavorite
                 },
-                modifier = Modifier.size(50.dp), // avoid the oval shape
                 shape = CircleShape,
                 border = BorderStroke(0.dp, MaterialTheme.colorScheme.surface),
                 colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.surface, contentColor = MaterialTheme.colorScheme.outline)
@@ -202,6 +205,7 @@ fun BreedCard(navController: NavHostController, viewModel: BaseBreedViewModel, b
 fun SearchLine(navController: NavHostController, breed: Breed) {
     Row(
         modifier = Modifier
+            .testTag("breed_search_line")
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 8.dp)
             .clickable(onClick = {
@@ -238,6 +242,7 @@ fun BreedsList(navController: NavHostController, viewModel: BaseBreedViewModel, 
             // SearchBar goes here
             SearchBar(
                 modifier = Modifier
+                    .testTag("${testTag}_search_bar")
                     .padding(horizontal = 16.dp)
                     .padding(top = 0.dp)
                     .padding(bottom = 16.dp)
