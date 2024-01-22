@@ -3,10 +3,12 @@ package com.catcompanion.app.repository
 import com.catcompanion.app.BuildConfig
 import com.catcompanion.app.api.BreedCatApi
 import com.catcompanion.app.api.CatApiService
+import com.catcompanion.app.db.BreedDao
 import com.catcompanion.app.model.Breed
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -14,7 +16,7 @@ import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class BreedRepository {
+class BreedRepository (private val breedDao: BreedDao) {
     // Cat API Service
     private val catApiService: CatApiService by lazy {
         // Define the interceptor, add authentication headers
@@ -140,5 +142,16 @@ class BreedRepository {
         }
     }
 
+    suspend fun addBreedToFavorites(breed: Breed) {
+        // Save on Local Database
+        breed.isFavorite = true
+        breedDao.insertOrUpdate(breed)
+    }
+
+    suspend fun removeBreedFromFavorites(breed: Breed) {
+        // Save on Local Database
+        breed.isFavorite = false
+        breedDao.insertOrUpdate(breed)
+    }
 
 }

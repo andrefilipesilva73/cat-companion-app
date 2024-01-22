@@ -19,7 +19,7 @@ class UserRepository(private val userDao: UserDao) {
             // Evaluate a need for an update
             if (updatedUser.second) {
                 // Update it on the database
-                userDao.updateUser(updatedUser.first)
+                userDao.update(updatedUser.first)
             }
 
             // Return the first one
@@ -31,7 +31,7 @@ class UserRepository(private val userDao: UserDao) {
             // Evaluate a need for an insert
             if (newUser.second) {
                 // Insert it on the database
-                userDao.insertUser(newUser.first)
+                userDao.insert(newUser.first)
             }
 
             // Return it

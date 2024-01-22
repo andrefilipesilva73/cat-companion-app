@@ -39,12 +39,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.catcompanion.app.R
+import com.catcompanion.app.db.AppDatabase
 import com.catcompanion.app.repository.BreedRepository
 import com.catcompanion.app.viewmodel.BreedDetailViewModel
 
@@ -60,8 +62,17 @@ fun BreedDetailLine(title: String, text: String) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BreedDetailScreen(navController: NavHostController, breedId: String) {
+    // Context
+    val context = LocalContext.current
+
     // Create View model
-    val breedDetailViewModel = remember { BreedDetailViewModel(BreedRepository()) }
+    val breedDetailViewModel = remember {
+        BreedDetailViewModel(
+            BreedRepository(
+                AppDatabase.getInstance(context).breedDao()
+            )
+        )
+    }
 
     // Observe individualBreed StateFlow
     val breed by breedDetailViewModel.selectedBreed.collectAsState()
