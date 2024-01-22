@@ -26,5 +26,5 @@ fun FavoritesListScreen(navController: NavHostController) {
     }
 
     // Build
-    BreedsList(navController, viewModel, BreedsListType.Favorites)
+    BreedsList(navController, viewModel, BreedsListType.Favorites, "home_favorites_screen")
 }

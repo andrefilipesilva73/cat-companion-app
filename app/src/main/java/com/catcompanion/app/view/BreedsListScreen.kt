@@ -26,5 +26,5 @@ fun BreedsListScreen(navController: NavHostController) {
     }
 
     // Build
-    BreedsList(navController, viewModel, BreedsListType.Breeds)
+    BreedsList(navController, viewModel, BreedsListType.Breeds, "home_breeds_screen")
 }

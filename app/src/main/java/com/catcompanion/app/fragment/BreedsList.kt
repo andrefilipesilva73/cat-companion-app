@@ -63,6 +63,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import com.catcompanion.app.viewmodel.BaseBreedViewModel
 
@@ -223,7 +224,7 @@ fun SearchLine(navController: NavHostController, breed: Breed) {
 // Declare a composable function that represents the UI for the BreedsListScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BreedsList(navController: NavHostController, viewModel: BaseBreedViewModel, type: BreedsListType) {
+fun BreedsList(navController: NavHostController, viewModel: BaseBreedViewModel, type: BreedsListType, testTag: String) {
     // Collecting states from ViewModel
     val pagingData = viewModel.breeds.collectAsLazyPagingItems()
     val searchText by viewModel.searchText.collectAsState()
@@ -232,6 +233,7 @@ fun BreedsList(navController: NavHostController, viewModel: BaseBreedViewModel, 
 
     // Build
     Scaffold(
+        modifier = Modifier.testTag(testTag),
         topBar = {
             // SearchBar goes here
             SearchBar(

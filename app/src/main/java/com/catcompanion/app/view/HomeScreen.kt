@@ -85,6 +85,7 @@ fun Home(mainNavController: NavHostController) {
             ) {
                 // List item
                 NavigationBarItem(
+                    modifier = Modifier.testTag("bottom_navigation_bar_breeds"),
                     selected = currentRoute == "breedsListScreen",
                     onClick = {
                         navController.navigate("breedsListScreen") {
@@ -104,6 +105,7 @@ fun Home(mainNavController: NavHostController) {
 
                 // Favorites item
                 NavigationBarItem(
+                    modifier = Modifier.testTag("bottom_navigation_bar_favorites"),
                     selected = currentRoute == "favoritesListScreen",
                     onClick = {
                         navController.navigate("favoritesListScreen") {
