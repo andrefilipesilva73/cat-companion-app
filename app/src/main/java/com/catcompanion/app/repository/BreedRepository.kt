@@ -204,4 +204,29 @@ class BreedRepository (private val breedDao: BreedDao) {
         }
     }
 
+    suspend fun getFavoritesBySearch(breedName: String): List<Breed> {
+        try {
+            return withContext(Dispatchers.IO) {
+                // Fetch breeds from the API
+                try {
+                    val response = breedDao.searchFavoritesByName(breedName)
+
+                    // Ready
+                    response
+                } catch (e: Exception) {
+                    e.printStackTrace()
+
+                    // Return nothing
+                    emptyList()
+                }
+            }
+        } catch (e: Exception) {
+            // Handle errors (e.g., network issues)
+            e.printStackTrace()
+
+            // Return the default breeds in case of an error
+            throw e
+        }
+    }
+
 }

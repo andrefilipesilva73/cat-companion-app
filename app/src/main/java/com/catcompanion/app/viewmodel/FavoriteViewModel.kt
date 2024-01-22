@@ -56,4 +56,22 @@ class FavoriteViewModel(private val breedRepository: BreedRepository) : BaseBree
             }
         }
     }
+
+    override fun performSearch() {
+        viewModelScope.launch {
+            try {
+                // Perform the search using the repository
+                val searchResults = breedRepository.getFavoritesBySearch(_searchText.value)
+
+                // Update the search results list
+                _searchResultsList.value = searchResults
+            } catch (e: Exception) {
+                // Handle errors (e.g., network issues)
+                e.printStackTrace()
+
+                // In case of an error, update the search results list with an empty list
+                _searchResultsList.value = emptyList()
+            }
+        }
+    }
 }

@@ -23,11 +23,11 @@ abstract class BaseBreedViewModel(private val breedRepository: BreedRepository) 
     val isSearching = _isSearching.asStateFlow()
 
     // Search text typed by the user
-    private val _searchText = MutableStateFlow("")
+    protected val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
     // Search list
-    private val _searchResultsList = MutableStateFlow<List<Breed>>(emptyList<Breed>())
+    protected val _searchResultsList = MutableStateFlow<List<Breed>>(emptyList<Breed>())
     val searchResultsList = _searchResultsList.asStateFlow()
 
     // Hold Search Job
@@ -35,27 +35,11 @@ abstract class BaseBreedViewModel(private val breedRepository: BreedRepository) 
 
     abstract fun fetchData()
 
+    abstract fun performSearch()
+
     fun retry() {
         // Obtain Breeds data
         fetchData()
-    }
-
-    fun performSearch() {
-        viewModelScope.launch {
-            try {
-                // Perform the search using the repository
-                val searchResults = breedRepository.getBreedsBySearch(_searchText.value)
-
-                // Update the search results list
-                _searchResultsList.value = searchResults
-            } catch (e: Exception) {
-                // Handle errors (e.g., network issues)
-                e.printStackTrace()
-
-                // In case of an error, update the search results list with an empty list
-                _searchResultsList.value = emptyList()
-            }
-        }
     }
 
     fun onQueryChange(text: String) {

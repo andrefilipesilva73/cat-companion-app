@@ -26,4 +26,7 @@ interface BreedDao {
 
     @Query("SELECT isFavorite FROM breeds WHERE id = :breedId")
     suspend fun isFavorite(breedId: String): Boolean
+
+    @Query("SELECT * FROM breeds WHERE isFavorite = 1 AND name LIKE '%' || :name || '%'")
+    fun searchFavoritesByName(name: String): List<Breed>
 }
