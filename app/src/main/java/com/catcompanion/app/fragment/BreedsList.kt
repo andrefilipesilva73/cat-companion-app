@@ -63,7 +63,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.catcompanion.app.viewmodel.IBreedViewModel
+import com.catcompanion.app.viewmodel.BaseBreedViewModel
 
 enum class BreedsListType {
     Breeds,
@@ -83,7 +83,7 @@ private fun navigateToBreedDetail(navController: NavHostController, breed: Breed
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BreedCard(navController: NavHostController, viewModel: IBreedViewModel, breed: Breed, type: BreedsListType) {
+fun BreedCard(navController: NavHostController, viewModel: BaseBreedViewModel, breed: Breed, type: BreedsListType) {
     // Hold context
     val context = LocalContext.current
 
@@ -239,7 +239,7 @@ fun SearchLine(navController: NavHostController, breed: Breed) {
 // Declare a composable function that represents the UI for the BreedsListScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BreedsList(navController: NavHostController, viewModel: IBreedViewModel, type: BreedsListType) {
+fun BreedsList(navController: NavHostController, viewModel: BaseBreedViewModel, type: BreedsListType) {
     // Collecting states from ViewModel
     val pagingData = viewModel.breeds.collectAsLazyPagingItems()
     val searchText by viewModel.searchText.collectAsState()
@@ -262,7 +262,7 @@ fun BreedsList(navController: NavHostController, viewModel: IBreedViewModel, typ
                 active = isSearching,
                 onActiveChange = { viewModel.onToggleSearch() },
                 leadingIcon = {
-                    Icon(Icons.Filled.Search, contentDescription = stringResource(id = R.string.search_breeds_by_name),)
+                    Icon(Icons.Filled.Search, contentDescription = stringResource(id = R.string.search_breeds_by_name))
                 },
                 trailingIcon = {
                     if (isSearching || searchText.isNotEmpty()) {
