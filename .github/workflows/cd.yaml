@@ -1,9 +1,13 @@
 name: Create Release Build
 
+# Trigger the workflow on push when a new tag is pushed to the repository
+# Tag Pattern: vX.Y.Z(W)
+# Version code: X.Y.Z
+# Build Number: W
 on:
   push:
-    branches:
-      - feature/ci-and-cd
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+([0-9]+)+
 
 jobs:
   build_and_release:
