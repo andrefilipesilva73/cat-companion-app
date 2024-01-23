@@ -2,7 +2,6 @@ package com.catcompanion.app
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.catcompanion.app.db.AppDatabase
 import com.catcompanion.app.db.BreedDao
 import com.catcompanion.app.model.Breed
@@ -11,14 +10,12 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 
 /**
  * Main Activity Instrumented test, which will execute on an Android device.
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class BreedDaoTest {
     private lateinit var dao: BreedDao
