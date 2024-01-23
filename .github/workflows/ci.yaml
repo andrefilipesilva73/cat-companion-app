@@ -32,5 +32,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleDebug
 
-    - name: Run tests
-      run: ./gradlew connectedAndroidTest
+    # Firebase Test Lab for Android
+    # https://firebase.google.com/docs/test-lab/android/get-started
+    # - name: Run Instrumentation Tests in Firebase Test Lab
+    #   run: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
