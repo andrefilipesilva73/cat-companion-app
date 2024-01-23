@@ -99,6 +99,9 @@ class HomeScreenTest {
 
         // Look for any result in list
         composeTestRule.onAllNodesWithTag("favorite_card")[0].assertExists()
+
+        // Remove from favorites
+        composeTestRule.onAllNodesWithTag("favorite_button")[0].performClick()
     }
 
     @Test
@@ -185,7 +188,7 @@ class HomeScreenTest {
         composeTestRule.onNodeWithTag("bottom_navigation_bar_favorites").performClick()
 
         // Wait for loadings to end
-        Thread.sleep(1000)
+        Thread.sleep(5000)
 
         // Look for any result in list
         composeTestRule.onAllNodesWithTag("favorite_card")[0].assertExists()

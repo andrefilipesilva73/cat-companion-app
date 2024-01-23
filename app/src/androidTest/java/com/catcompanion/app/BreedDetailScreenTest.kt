@@ -1,20 +1,10 @@
 package com.catcompanion.app
 
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.navigation.compose.rememberNavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.catcompanion.app.db.AppDatabase
-import com.catcompanion.app.fragment.BreedsList
-import com.catcompanion.app.fragment.BreedsListType
-import com.catcompanion.app.repository.BreedRepository
-import com.catcompanion.app.view.BreedsListScreen
-import com.catcompanion.app.view.Home
-import com.catcompanion.app.viewmodel.BreedViewModel
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
