@@ -42,7 +42,7 @@ class BreedDetailScreenTest {
         Thread.sleep(5000)
     }
 
-    private fun markAsFavorite() {
+    private fun executeMarkAsFavorite() {
         // Enter on the Screen
         enterScreen()
 
@@ -51,7 +51,7 @@ class BreedDetailScreenTest {
     }
 
     @Test
-    fun testDetailsList() {
+    fun detailsList() {
         // Enter on the Screen
         enterScreen()
 
@@ -76,9 +76,9 @@ class BreedDetailScreenTest {
     }
 
     @Test
-    fun testMarkAsFavorite() {
+    fun markAsFavorite() {
         // Mark as Favorite
-        markAsFavorite()
+        executeMarkAsFavorite()
 
         // Go back to Home
         composeTestRule.onNodeWithTag("breed_detail_screen_back_button").performClick()
@@ -94,9 +94,9 @@ class BreedDetailScreenTest {
     }
 
     @Test
-    fun testRemoveFromFavorites() {
+    fun removeFromFavorites() {
         // Mark as Favorite
-        markAsFavorite()
+        executeMarkAsFavorite()
 
         // Remove it from Favorites
         composeTestRule.onNodeWithTag("breed_detail_screen_favorite_button").performClick()

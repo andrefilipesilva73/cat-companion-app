@@ -19,7 +19,7 @@ class MainActivityTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun testHomeScreenLanding() {
+    fun homeScreenLanding() {
         // Start the app
         composeTestRule.setContent {
             // Call the entry point composable function

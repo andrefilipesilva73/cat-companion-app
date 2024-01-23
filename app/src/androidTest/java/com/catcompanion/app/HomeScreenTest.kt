@@ -30,7 +30,7 @@ class HomeScreenTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun testBottomNavigationBarNavigation() {
+    fun bottomNavigationBarNavigation() {
         // Start the app
         composeTestRule.setContent {
             // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
@@ -57,7 +57,7 @@ class HomeScreenTest {
     }
 
     @Test
-    fun testBreedListLoading() {
+    fun breedListLoading() {
         // Start the app
         composeTestRule.setContent {
             // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
@@ -75,7 +75,7 @@ class HomeScreenTest {
     }
 
     @Test
-    fun testMarkAsFavoriteAndListLoading() {
+    fun markAsFavoriteAndListLoading() {
         // Start the app
         composeTestRule.setContent {
             // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
@@ -105,7 +105,7 @@ class HomeScreenTest {
     }
 
     @Test
-    fun testBreedCardNavigationToDetail() {
+    fun breedCardNavigationToDetail() {
         // Start the app
         composeTestRule.setContent {
             // Call the entry point composable function
@@ -126,7 +126,7 @@ class HomeScreenTest {
     }
 
     @Test
-    fun testSearchBar() {
+    fun searchBar() {
         // Create View model
         var viewModel: BreedViewModel? = null
 
@@ -168,7 +168,7 @@ class HomeScreenTest {
     }
 
     @Test
-    fun testRemoveFromFavorites() {
+    fun removeFromFavorites() {
         // Start the app
         composeTestRule.setContent {
             // Create a NavHostController that handles the adding of the ComposeNavigator and DialogNavigator.
