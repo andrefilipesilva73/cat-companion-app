@@ -33,7 +33,7 @@ class BreedRepositoryTest {
     );
 
     @Before
-    fun initViewModel() {
+    fun initRepository() {
         // Context
         val context = ApplicationProvider.getApplicationContext<Context>()
 
