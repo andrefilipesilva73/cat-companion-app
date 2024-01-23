@@ -7,7 +7,6 @@ import com.catcompanion.app.db.AppDatabase
 import com.catcompanion.app.model.Breed
 import com.catcompanion.app.repository.BreedRepository
 import com.catcompanion.app.viewmodel.BreedDetailViewModel
-import com.catcompanion.app.viewmodel.BreedViewModel
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
