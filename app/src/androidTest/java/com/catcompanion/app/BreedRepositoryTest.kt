@@ -21,7 +21,7 @@ class BreedRepositoryTest {
     private lateinit var repository: BreedRepository
 
     // Create Breed
-    val breed1 = Breed(
+    private val breed1 = Breed(
         "1",
         "Amazing Cat",
         "temperament",
