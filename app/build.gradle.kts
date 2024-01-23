@@ -105,6 +105,7 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-paging:2.6.1")
     implementation("androidx.navigation:navigation-testing:2.7.6")
+    implementation("androidx.test:core-ktx:1.5.0")
     ksp("androidx.room:room-compiler:2.6.1")
 
     // Test implementation dependencies
@@ -115,4 +116,5 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 }
