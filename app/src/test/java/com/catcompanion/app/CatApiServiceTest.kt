@@ -9,6 +9,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -43,5 +45,33 @@ class CatApiServiceTest {
         // Get
         val breeds = catApiService.getBreeds(1, 0)
         assertEquals(1, breeds.size)
+    }
+
+    @Test
+    fun getBreedsBySearch() = runTest {
+        // Get
+        val breeds = catApiService.getBreedsBySearch("American", 0)
+        assertTrue(breeds.isNotEmpty())
+    }
+
+    @Test
+    fun getBreedById() = runTest {
+        // Get
+        val breed = catApiService.getBreedById("ebur")
+        assertNotNull(breed)
+    }
+
+    @Test
+    fun getImageById() = runTest {
+        // Get
+        val image = catApiService.getImageById("njK25knLH")
+        assertNotNull(image)
+    }
+
+    @Test
+    fun getBreedImageBySearch() = runTest {
+        // Get
+        val images = catApiService.getBreedImageBySearch("ebur")
+        assertTrue(images.isNotEmpty())
     }
 }
