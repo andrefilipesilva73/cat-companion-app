@@ -256,4 +256,29 @@ class BreedRepository (private val breedDao: BreedDao) {
         }
     }
 
+    suspend fun readDatabase(): List<Breed> {
+        try {
+            return withContext(Dispatchers.IO) {
+                // Fetch breeds from the API
+                try {
+                    val response = breedDao.getAll()
+
+                    // Ready
+                    response
+                } catch (e: Exception) {
+                    e.printStackTrace()
+
+                    // Return nothing
+                    emptyList()
+                }
+            }
+        } catch (e: Exception) {
+            // Handle errors (e.g., network issues)
+            e.printStackTrace()
+
+            // Return the default breeds in case of an error
+            throw e
+        }
+    }
+
 }
