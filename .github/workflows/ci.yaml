@@ -3,7 +3,7 @@ name: Validate Integration
 on:
   push:
     branches:
-      - feature/ci-and-cd
+      - main
 
 jobs:
   build_and_test:
